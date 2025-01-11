@@ -21,9 +21,15 @@
 				"adapter": "kotlin"
 			}
 		],
+		"client": [
+			{
+				"value": "com.rhseung.modulus.ModulusClient",
+				"adapter": "kotlin"
+			}
+		],
 		"fabric-datagen": [
 			{
-				"value": "com.rhseung.modulus.ModulusDataGenerator",
+				"value": "com.rhseung.modulus.ModulusData",
 				"adapter": "kotlin"
 			}
 		]

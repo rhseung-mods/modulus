@@ -1,0 +1,8 @@
+// 1.21.3	2025-01-11T22:04:16.7860947	Modulus/Tags for minecraft:block
+3f8453adfb6b756017c27c0080ca9aa8cdb1f701 data\minecraft\tags\block\incorrect_for_iron_tool.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data\minecraft\tags\block\incorrect_for_netherite_tool.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data\modulus\tags\block\needs_wood_tool.json
+8a6622b43289f8a5f287da53b333891195a29497 data\minecraft\tags\block\incorrect_for_wooden_tool.json
+9e8a272d799fe63d47a9dcc5164374a957d5026a data\minecraft\tags\block\incorrect_for_stone_tool.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data\modulus\tags\block\needs_netherite_tool.json
+d8e7aeed9660e09fa52914e8bcec1f298bcabc13 data\minecraft\tags\block\incorrect_for_diamond_tool.json

@@ -1,0 +1,8 @@
+{
+  "values": [
+    "#minecraft:needs_stone_tool",
+    "#minecraft:needs_iron_tool",
+    "#minecraft:needs_diamond_tool",
+    "#modulus:needs_netherite_tool"
+  ]
+}
