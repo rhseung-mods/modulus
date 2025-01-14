@@ -164,16 +164,5 @@ class ToolItem private constructor(
 //            require(itemStack.item is ModularToolItem) { "ItemStack($itemStack) is not a ModularToolItem" };
 //            return itemStack.get(ModComponents.STRUCTURED_DURABILITY)!!;
 //        }
-
-        fun onClient(item: ToolItem) {
-            ColorProviderRegistry.ITEM.register({ stack, tintIndex ->
-                val toolType = (stack.item as ToolItem).toolType;
-                val toolPartsComponent = getToolPartsComponent(stack);
-                val toolPosition = toolType.everyPartPositions[tintIndex];
-                val toolPart = toolPartsComponent[toolPosition];
-
-                return@register (toolPart?.toolMaterial?.color ?: ARGBColor.EMPTY).toInt();
-            }, item);
-        }
     }
 }

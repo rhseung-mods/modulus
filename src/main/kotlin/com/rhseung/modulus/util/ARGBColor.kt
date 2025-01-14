@@ -8,6 +8,8 @@ import net.minecraft.network.codec.PacketCodecs
 
 class ARGBColor : RGBColor {
     val A: Int;
+    val a: Float
+        get() = A.toFloat() / 255.0f;
 
     constructor(A: Int, R: Int, G: Int, B: Int) : super(R, G, B) {
         this.A = A.coerceIn(0, 255);

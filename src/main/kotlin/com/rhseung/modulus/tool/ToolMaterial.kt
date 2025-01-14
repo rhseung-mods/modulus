@@ -40,25 +40,61 @@ data class ToolMaterial(
         val VALUES = mutableListOf<ToolMaterial>();
 
         val EMPTY = ToolMaterial(
-            "empty", RGBColor.WHITE.zeroAlpha(),
-            ToolTier.WOOD, 0, 0, 0f, 0f, 0f,
+            "empty",
+            RGBColor.WHITE.zeroAlpha(),
+            ToolTier.WOOD,
+            0,
+            0,
+            0f,
+            0f,
+            0f,
         );
 
         val UNKNOWN = ToolMaterial(
-            "unknown", RGBColor.WHITE.fullAlpha(),
-            ToolTier.WOOD, 100, 10, 0f, 0f, 2f,
+            "unknown",
+            RGBColor.WHITE.fullAlpha(),
+            ToolTier.WOOD,
+            100,
+            10,
+            0f,
+            0f,
+            2f,
         );
 
         val WOOD = ToolMaterial(
-            "wood", RGBColor.WOOD.fullAlpha(), ToolTier.WOOD, 59, 15, 0f, 0f, 2f, ItemTags.WOODEN_TOOL_MATERIALS
+            "wood",
+            RGBColor.WOOD.fullAlpha(),
+            ToolTier.WOOD,
+            59,
+            15,
+            0f,
+            0f,
+            2f,
+            ItemTags.WOODEN_TOOL_MATERIALS
         );
 
         val STONE = ToolMaterial(
-            "stone", RGBColor.STONE.fullAlpha(), ToolTier.STONE, 131, 5, 1f, 0f, 4f, ItemTags.STONE_TOOL_MATERIALS
+            "stone",
+            RGBColor.STONE.fullAlpha(),
+            ToolTier.STONE,
+            131,
+            5,
+            1f,
+            0f,
+            4f,
+            ItemTags.STONE_TOOL_MATERIALS
         );
 
         val IRON = ToolMaterial(
-            "iron", RGBColor.IRON.fullAlpha(), ToolTier.IRON, 250, 14, 2f, 0f, 6f, ItemTags.IRON_TOOL_MATERIALS
+            "iron",
+            RGBColor.IRON.fullAlpha(),
+            ToolTier.IRON,
+            250,
+            14,
+            2f,
+            0f,
+            6f,
+            ItemTags.IRON_TOOL_MATERIALS
         );
 
         val DIAMOND = ToolMaterial(
@@ -74,7 +110,15 @@ data class ToolMaterial(
         );
 
         val GOLD = ToolMaterial(
-            "gold", RGBColor.GOLD.fullAlpha(), ToolTier.WOOD, 32, 22, 0f, 0f, 12f, ItemTags.GOLD_TOOL_MATERIALS
+            "gold",
+            RGBColor.GOLD.fullAlpha(),
+            ToolTier.WOOD,
+            32,
+            22,
+            0f,
+            0f,
+            12f,
+            ItemTags.GOLD_TOOL_MATERIALS
         );
 
         val NETHERITE = ToolMaterial(

@@ -7,22 +7,11 @@ import com.rhseung.modulus.tool.ToolPosition
 import com.rhseung.modulus.tool.ToolTier
 import com.rhseung.modulus.tool.ToolType
 import net.minecraft.block.Block
+import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.item.Item
 import net.minecraft.registry.tag.TagKey
 
 class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<ToolPosition, ToolPart>) {
-    init {
-        val necessaryPartPositions = toolType.necessaryPartPositions;
-        val optionalPartPositions = toolType.optionalPartPositions;
-
-        val missingNecessaryPositions = necessaryPartPositions.filter { it !in toolPartByPosition.keys };
-        if (missingNecessaryPositions.isNotEmpty())
-            throw IllegalArgumentException("Missing necessary positions: $missingNecessaryPositions for $toolType");
-
-        val extraPositions = toolPartByPosition.keys - toolType.everyPartPositions;
-        if (extraPositions.isNotEmpty())
-            throw IllegalArgumentException("Extra positions: $extraPositions for $toolType");
-    }
 
     val toolPositions: List<ToolPosition> = toolPartByPosition.keys.toList();
     val toolParts: List<ToolPart> = toolPartByPosition.values.toList();
@@ -56,7 +45,7 @@ class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<Too
      */
     val bonusAttackSpeed: Double = toolMaterials.sumOf { it.bonusAttackSpeed.toDouble() };
     val baseAttackSpeed: Double = toolPartTypes.sumOf { it.baseAttackSpeed.toDouble() };
-    val attackSpeed: Double = baseAttackSpeed + bonusAttackSpeed;
+    val attackSpeed: Double = baseAttackSpeed + bonusAttackSpeed - EntityAttributes.ATTACK_SPEED.value().defaultValue;   // attackSpeed - 4F
 
     /**
      * miningSpeed = sum of mining speed of all materials
@@ -72,6 +61,21 @@ class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<Too
      * mineableBlockTags = list of mineable block tags of all materials
      */
     val mineableBlockTags: List<TagKey<Block>> = toolPartTypes.flatMap { it.mineableBlockTags };
+
+    init {
+        val necessaryPartPositions = toolType.necessaryPartPositions;
+
+        val missingNecessaryPositions = necessaryPartPositions.filter { it !in toolPartByPosition.keys };
+        if (missingNecessaryPositions.isNotEmpty())
+            throw IllegalArgumentException("Missing necessary positions: $missingNecessaryPositions for $toolType");
+
+        val extraPositions = toolPartByPosition.keys - toolType.everyPartPositions;
+        if (extraPositions.isNotEmpty())
+            throw IllegalArgumentException("Extra positions: $extraPositions for $toolType");
+
+        if (attackSpeed <= -EntityAttributes.ATTACK_SPEED.value().defaultValue)     // -4f
+            throw IllegalArgumentException("Attack speed must be positive: $attackSpeed for $toolPartByPosition");
+    }
 
     operator fun get(position: ToolPosition): ToolPart? = toolPartByPosition[position];
 

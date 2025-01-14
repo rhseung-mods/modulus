@@ -49,7 +49,7 @@ open class ToolPartType(
             "pickaxe_left_head",
             ToolPosition.LEFT_HEAD,
             0.5f,
-            -2.8f,
+            -0.9f,
             listOf(BlockTags.PICKAXE_MINEABLE)
         );
 
@@ -57,7 +57,7 @@ open class ToolPartType(
             "pickaxe_right_head",
             ToolPosition.RIGHT_HEAD,
             0.5f,
-            -2.8f,
+            -0.9f,
             listOf(BlockTags.PICKAXE_MINEABLE)
         );
 
@@ -73,7 +73,7 @@ open class ToolPartType(
             "shovel_head",
             ToolPosition.HEAD,
             1.5f,
-            -3f,
+            -2f,
             listOf(BlockTags.SHOVEL_MINEABLE)
         );
 
@@ -81,7 +81,7 @@ open class ToolPartType(
             "hoe_head",
             ToolPosition.LEFT_HEAD,
             0f,
-            0f,
+            -2f,
             listOf(BlockTags.HOE_MINEABLE)
         );
 
@@ -89,21 +89,21 @@ open class ToolPartType(
             "butt_head",
             ToolPosition.RIGHT_HEAD,
             0f,
-            0f,
+            1f,
         );
 
         val HANDLE = ToolPartType(
             "handle",
             ToolPosition.HANDLE,
             0f,
-            0f
+            2f
         );
 
         val BINDING = ToolPartType(
             "binding",
             ToolPosition.BINDING,
             0f,
-            0f
+            1f
         );
 
         val GRIP = ToolPartType(
