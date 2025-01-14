@@ -1,12 +1,13 @@
 package com.rhseung.modulus
 
 import com.rhseung.modulus.init.ModItems
-import com.rhseung.modulus.item.ModularToolItem
+import com.rhseung.modulus.item.ToolItem
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 
 object ModulusClient : ClientModInitializer {
     override fun onInitializeClient() {
-        ModItems.TOOLS.values.forEach(ModularToolItem::onClient);
-        ModularToolItem.onClient(ModItems.DIAMOND_PICKAXE);
+        ModItems.initializeClient();
+//        ModelLoadingPlugin.register()
     }
 }

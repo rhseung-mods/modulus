@@ -16,5 +16,11 @@ enum class ToolPosition(vararg subPositions: ToolPosition) {
         }
     }
 
+    var isMain: Boolean = false;
     val subPositions: Set<ToolPosition> = subPositions.toSet();
+
+    fun mainPosition(): ToolPosition {
+        isMain = true;
+        return this;
+    }
 }

@@ -4,6 +4,6 @@ data class ToolPart(val partType: ToolPartType, val toolMaterial: ToolMaterial) 
     val isEmpty = toolMaterial == ToolMaterial.EMPTY;
 
     override fun toString(): String {
-        return "ToolPart($toolMaterial/$partType)";
+        return "$toolMaterial/$partType";
     }
 };

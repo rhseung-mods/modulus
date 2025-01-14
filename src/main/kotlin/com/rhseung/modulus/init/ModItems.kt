@@ -1,24 +1,45 @@
 package com.rhseung.modulus.init
 
-import com.rhseung.modulus.item.ModularToolItem
+import com.rhseung.modulus.item.InitializableItem
+import com.rhseung.modulus.item.ToolItem
+import com.rhseung.modulus.item.ToolPartItem
 import com.rhseung.modulus.tool.ToolMaterial
 import com.rhseung.modulus.tool.ToolPartType
-import com.rhseung.modulus.tool.ToolType
+import com.rhseung.modulus.tool.ToolPreType
 
 object ModItems : IModInit {
-    val DIAMOND_PICKAXE = ModularToolItem.of("example_diamond_pickaxe", ToolType.PICKAXE) { it.withMaterials(
-        ToolPartType.HANDLE to ToolMaterial.WOOD,
-        ToolPartType.BINDING to ToolMaterial.IRON,
-        ToolPartType.PICKAXE_LEFT_HEAD to ToolMaterial.DIAMOND,
-        ToolPartType.PICKAXE_RIGHT_HEAD to ToolMaterial.DIAMOND
-    ) };
+    override fun initialize() {
+        (TOOLS.values + PARTS.values + DIAMOND_PICKAXE).forEach(InitializableItem::commonInit);
+    }
+
+    fun initializeClient() {
+        (TOOLS.values + PARTS.values + DIAMOND_PICKAXE).forEach(InitializableItem::clientInit);
+    }
+
+    val DIAMOND_PICKAXE = ToolItem.of("example_diamond_pickaxe", ToolPreType.PICKAXE.toolType,
+        ToolPreType.PICKAXE.withParts(
+            ToolPartType.PICKAXE_LEFT_HEAD.withMaterial(ToolMaterial.DIAMOND),
+            ToolPartType.PICKAXE_RIGHT_HEAD.withMaterial(ToolMaterial.DIAMOND),
+            ToolPartType.HANDLE.withMaterial(ToolMaterial.WOOD),
+            ToolPartType.BINDING.withMaterial(ToolMaterial.IRON)
+        )
+    );
 
     val TOOLS = ToolMaterial.VALUES.flatMap { material ->
-        ToolType.VALUES.map { type ->
-            (material to type) to ModularToolItem.of(
-                "${material.name}_${type.name}",
-                type
-            ) { it.withSameMaterialNecessary(material) }
-        }
+        ToolPreType.entries.map { preToolType -> Pair(
+            (material to preToolType),
+            ToolItem.of(
+                "${material.name}_${preToolType.name.lowercase()}",    // todo: name mapping (pickaxe, axe, adze etc)
+                preToolType.toolType,
+                preToolType.withSameMaterial(material)
+            )
+        )}
+    }.toMap();
+
+    val PARTS = ToolMaterial.VALUES.flatMap { material ->
+        ToolPartType.VALUES.map { partType -> Pair(
+            (material to partType),
+            ToolPartItem(partType.withMaterial(material))
+        )}
     }.toMap();
 }

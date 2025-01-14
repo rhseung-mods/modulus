@@ -1,11 +1,15 @@
 {
-	"required": true,
-	"package": "com.rhseung.modulus.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
+    "required": true,
+    "package": "com.rhseung.modulus.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
         "ItemStackMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "client": [
+        "ItemColorsMixin",
+        "ItemRendererMixin"
+    ]
 }

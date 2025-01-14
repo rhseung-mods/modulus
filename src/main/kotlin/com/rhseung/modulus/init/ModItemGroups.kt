@@ -16,10 +16,19 @@ object ModItemGroups : IModInit {
     const val TOOLS_NAME = "itemGroup.$MOD_ID.tools";
     val TOOLS = of("tools");
 
+    const val PARTS_NAME = "itemGroup.$MOD_ID.parts";
+    val PARTS = of("parts");
+
     override fun initialize() {
         Registry.register(Registries.ITEM_GROUP, TOOLS.value, FabricItemGroup.builder()
-            .displayName(Text.of(TOOLS_NAME))
+            .displayName(Text.translatable(TOOLS_NAME))
             .icon { ItemStack(ModItems.DIAMOND_PICKAXE) }
+            .build()
+        );
+
+        Registry.register(Registries.ITEM_GROUP, PARTS.value, FabricItemGroup.builder()
+            .displayName(Text.translatable(PARTS_NAME))
+            .icon { ItemStack(ModItems.PARTS.values.first()) }
             .build()
         );
     }

@@ -16,7 +16,7 @@ class BlockTagProvider(
         ToolTier.entries.forEachIndexed { i, tier ->
             getOrCreateTagBuilder(tier.incorrectBlockTag).apply {
                 for (j in i + 1..<ToolTier.entries.size) {
-                    forceAddTag(ToolTier.entries[j].newMineableBlockTag)
+                    forceAddTag(ToolTier.entries[j].newMineableBlockTag);
                 }
             }
 

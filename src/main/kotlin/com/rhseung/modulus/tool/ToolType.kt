@@ -1,176 +1,79 @@
 package com.rhseung.modulus.tool
 
-import com.rhseung.modulus.tool.ToolPartType.Companion.main
-import net.minecraft.block.Block
-import net.minecraft.registry.tag.BlockTags
-import net.minecraft.registry.tag.TagKey
-
-data class ToolType(
-    val name: String,
-    val primitiveType: ToolPrimitiveType,
-    val baseAttackDamage: Float,
-    val baseAttackSpeed: Float,
-    val mineableBlockTags: List<TagKey<Block>>,
-    val partTypes: List<ToolPartType>,
-    val optionalPartTypes: List<ToolPartType>
+enum class ToolType(
+    val necessaryPartPositions: List<ToolPosition>,
+    val optionalPartPositions: List<ToolPosition>
 ) {
-    val necessaryPartTypes: List<ToolPartType> get() = partTypes;
-    val everyPartTypes = necessaryPartTypes + optionalPartTypes;
-    val mainPartType = partTypes.first { it.isMain };
+    SINGLE(
+        listOf(
+            ToolPosition.HANDLE,
+            ToolPosition.HEAD.mainPosition(),
+            ToolPosition.BINDING,
+        ), listOf(
+            ToolPosition.GRIP,
+            ToolPosition.EXTRA
+        )
+    ),
 
-    val positions = everyPartTypes.associate { it.position to it };
+    DOUBLE(
+        listOf(
+            ToolPosition.HANDLE,
+            ToolPosition.RIGHT_HEAD,
+            ToolPosition.LEFT_HEAD.mainPosition(),
+            ToolPosition.BINDING,
+        ), listOf(
+            ToolPosition.GRIP,
+            ToolPosition.EXTRA
+        )
+    ),
+    ;
 
-    fun isOptionalPart(partType: ToolPartType) = partType in optionalPartTypes;
+    val everyPartPositions = necessaryPartPositions + optionalPartPositions;
 
-    fun isOptionalPart(part: ToolPart) = part.partType in optionalPartTypes;
+    val mainPartPosition = necessaryPartPositions.firstOrNull { it.isMain }
+        ?: throw IllegalArgumentException("ToolType $name has no main part");
 
-    fun isNecessaryPart(partType: ToolPartType) = partType in partTypes;
+    fun isOptionalPart(partType: ToolPartType) = partType.position in optionalPartPositions;
 
-    fun isNecessaryPart(part: ToolPart) = part.partType in partTypes;
+    fun isOptionalPart(part: ToolPart) = part.partType.position in optionalPartPositions;
 
-    fun withMaterials(vararg materials: Pair<ToolPartType, ToolMaterial>): List<ToolPart> {
-        return materials.map { it.first.withMaterial(it.second) };
+    fun isNecessaryPart(partType: ToolPartType) = partType.position in necessaryPartPositions;
+
+    fun isNecessaryPart(part: ToolPart) = part.partType.position in necessaryPartPositions;
+
+    fun withPartTypes(vararg partTypes: ToolPartType): Map<ToolPosition, ToolPartType> {
+        require(partTypes.map { it.position }.containsAll(everyPartPositions)) { "ToolType $name does not have part types $everyPartPositions" };
+
+        return partTypes.associateBy { it.position };
     }
 
-    fun withSameMaterial(material: ToolMaterial): List<ToolPart> {
-        return withMaterials(*everyPartTypes.map { it to material }.toTypedArray());
+    fun withNecessaryPartTypes(vararg partTypes: ToolPartType): Map<ToolPosition, ToolPartType> {
+        require(partTypes.map { it.position }.containsAll(necessaryPartPositions))  { "ToolType $name does not have necessary part types $necessaryPartPositions" };
+
+        return partTypes.associateBy { it.position };
     }
 
-    fun withSameMaterialNecessary(material: ToolMaterial): List<ToolPart> {
-        return withMaterials(*necessaryPartTypes.map { it to material }.toTypedArray());
+    fun withParts(vararg parts: ToolPart): Map<ToolPosition, ToolPart> {
+        require(parts.map { it.partType.position }.containsAll(everyPartPositions)) { "ToolType $name does not have parts $everyPartPositions" };
+
+        return parts.associateBy { it.partType.position };
     }
 
-    override fun toString(): String {
-        return name.uppercase();
+    fun withNecessaryParts(vararg parts: ToolPart): Map<ToolPosition, ToolPart> {
+        require(parts.map { it.partType.position }.containsAll(necessaryPartPositions)) { "ToolType $name does not have necessary parts $necessaryPartPositions" };
+
+        return parts.associateBy { it.partType.position };
     }
 
     init {
-        require(mineableBlockTags.isNotEmpty()) { "ToolType $name has no mineable block tags" };
-        require(partTypes.count { it.isMain } == 1) { "ToolType $name has no or multiple main parts" };
-        require(optionalPartTypes.all { !it.isMain }) { "ToolType $name has optional main parts" };
+        require(necessaryPartPositions.count { it.isMain } == 1) { "ToolType $name has no or multiple main parts" };
+        require(optionalPartPositions.all { !it.isMain }) { "ToolType $name has optional main parts" };
 
-        for ((pos1, _) in positions) {
-            val subPositions = pos1.subPositions;
-            if (subPositions.isEmpty())
-                continue;
-
-            for ((pos2, _) in positions) {
-                if (pos1 == pos2)
-                    continue;
-
-                if (pos2 in subPositions)
-                    throw IllegalArgumentException("Position $pos2 is a subposition of $pos1, positions=$positions");
+        for (pos1 in everyPartPositions) {
+            for (pos2 in everyPartPositions) {
+                if (pos1 != pos2 && pos2 in pos1.subPositions)
+                    throw IllegalArgumentException("Position $pos2 is a subposition of $pos1");
             }
         }
-
-        VALUES.add(this);
-    }
-
-    class Builder(val name: String, val primitiveType: ToolPrimitiveType) {
-        private val mineableBlockTags: MutableList<TagKey<Block>> = mutableListOf();
-        private var baseAttackDamage: Float = 0f;
-        private var baseAttackSpeed: Float = 0f;
-        private var partTypes: List<ToolPartType> = emptyList();
-        private var optionalPartTypes: List<ToolPartType> = emptyList();
-
-        fun addMineable(mineableBlockTag: TagKey<Block>) = apply { this.mineableBlockTags.add(mineableBlockTag) };
-        fun setBaseAttackDamage(baseAttackDamage: Float) = apply { this.baseAttackDamage = baseAttackDamage };
-        fun setBaseAttackSpeed(baseAttackSpeed: Float) = apply { this.baseAttackSpeed = baseAttackSpeed };
-        fun setPartTypes(vararg partTypes: ToolPartType) = apply { this.partTypes = partTypes.toList() };
-        fun setOptionalPartTypes(vararg optionalPartTypes: ToolPartType) = apply { this.optionalPartTypes = optionalPartTypes.toList() };
-
-        fun build(): ToolType {
-            return ToolType(
-                name,
-                primitiveType,
-                baseAttackDamage,
-                baseAttackSpeed,
-                mineableBlockTags,
-                partTypes,
-                optionalPartTypes
-            );
-        };
-    }
-
-    companion object {
-        val VALUES = mutableListOf<ToolType>();
-
-        val PICKAXE = ToolType.Builder("pickaxe", ToolPrimitiveType.MINING)
-            .addMineable(BlockTags.PICKAXE_MINEABLE)
-            .setBaseAttackDamage(1f)
-            .setBaseAttackSpeed(-2.8f)
-            .setPartTypes(
-                ToolPartType.HANDLE,
-                ToolPartType.PICKAXE_RIGHT_HEAD,
-                main(ToolPartType.PICKAXE_LEFT_HEAD),
-                ToolPartType.BINDING,
-            )
-            .setOptionalPartTypes(
-                ToolPartType.GRIP,
-                ToolPartType.EXTRA
-            )
-            .build();
-
-        val AXE = ToolType.Builder("axe", ToolPrimitiveType.MINING)
-            .addMineable(BlockTags.AXE_MINEABLE)
-            .setBaseAttackDamage(5f)
-            .setBaseAttackSpeed(-3f)
-            .setPartTypes(
-                ToolPartType.HANDLE,
-                main(ToolPartType.AXE_HEAD),
-                ToolPartType.BINDING,
-            )
-            .setOptionalPartTypes(
-                ToolPartType.GRIP,
-                ToolPartType.EXTRA
-            )
-            .build();
-
-        val ADZE = ToolType.Builder("adze", ToolPrimitiveType.MINING)
-            .addMineable(BlockTags.PICKAXE_MINEABLE)
-            .addMineable(BlockTags.AXE_MINEABLE)
-            .setBaseAttackDamage(3f)
-            .setBaseAttackSpeed(-3f)
-            .setPartTypes(
-                ToolPartType.HANDLE,
-                ToolPartType.PICKAXE_RIGHT_HEAD,
-                main(ToolPartType.AXE_HEAD),
-                ToolPartType.BINDING,
-            )
-            .setOptionalPartTypes(
-                ToolPartType.GRIP,
-                ToolPartType.EXTRA
-            )
-            .build();
-
-        val SHOVEL = ToolType.Builder("shovel", ToolPrimitiveType.MINING)
-            .addMineable(BlockTags.SHOVEL_MINEABLE)
-            .setBaseAttackDamage(1.5f)
-            .setBaseAttackSpeed(-3f)
-            .setPartTypes(
-                ToolPartType.HANDLE,
-                main(ToolPartType.SHOVEL_HEAD),
-                ToolPartType.BINDING,
-            )
-            .setOptionalPartTypes(
-                ToolPartType.GRIP,
-                ToolPartType.EXTRA
-            )
-            .build();
-
-        val HOE = ToolType.Builder("hoe", ToolPrimitiveType.MINING)
-            .addMineable(BlockTags.HOE_MINEABLE)
-            .setBaseAttackDamage(0f)
-            .setBaseAttackSpeed(0f)
-            .setPartTypes(
-                ToolPartType.HANDLE,
-                main(ToolPartType.HOE_HEAD),
-                ToolPartType.BINDING,
-            )
-            .setOptionalPartTypes(
-                ToolPartType.GRIP,
-                ToolPartType.EXTRA
-            )
-            .build();
     }
 }
