@@ -6,6 +6,7 @@ import com.rhseung.modulus.tool.ToolPartType
 import com.rhseung.modulus.tool.ToolPosition
 import com.rhseung.modulus.tool.ToolTier
 import com.rhseung.modulus.tool.ToolType
+import com.rhseung.modulus.util.ARGBColor
 import net.minecraft.block.Block
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.item.Item
@@ -13,10 +14,11 @@ import net.minecraft.registry.tag.TagKey
 
 class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<ToolPosition, ToolPart>) {
 
-    val toolPositions: List<ToolPosition> = toolPartByPosition.keys.toList();
-    val toolParts: List<ToolPart> = toolPartByPosition.values.toList();
+    val toolPositions: List<ToolPosition> = toolType.everyPartPositions.filter { toolPartByPosition.containsKey(it) };
+    val toolParts: List<ToolPart> = toolPositions.map { toolPartByPosition[it]!! };
     val toolPartTypes: List<ToolPartType> = toolParts.map { it.partType };
     val toolMaterials: List<ToolMaterial> = toolParts.map { it.toolMaterial };
+    val size: Int = toolPartByPosition.size;
 
     /**
      * enchantability = sum of enchantability of all materials
@@ -73,6 +75,9 @@ class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<Too
         if (extraPositions.isNotEmpty())
             throw IllegalArgumentException("Extra positions: $extraPositions for $toolType");
 
+        if (durability <= 0)
+            throw IllegalArgumentException("Durability must be positive: $durability for $toolPartByPosition");
+
         if (attackSpeed <= -EntityAttributes.ATTACK_SPEED.value().defaultValue)     // -4f
             throw IllegalArgumentException("Attack speed must be positive: $attackSpeed for $toolPartByPosition");
     }
@@ -91,6 +96,10 @@ class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<Too
 
     fun forEachIndexed(action: (Int, ToolPosition, ToolPart) -> Unit) {
         toolPartByPosition.entries.forEachIndexed { i, (position, part) -> action(i, position, part) };
+    }
+
+    fun getColor(tintIndex: Int): ARGBColor {
+        return get(toolType.everyPartPositions[tintIndex])!!.toolMaterial.color;
     }
 
     override fun toString(): String {

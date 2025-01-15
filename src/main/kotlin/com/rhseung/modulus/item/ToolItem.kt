@@ -1,17 +1,17 @@
 package com.rhseung.modulus.item
 
+import com.rhseung.modulus.Modulus
 import com.rhseung.modulus.init.ModComponents
 import com.rhseung.modulus.init.ModItemGroups
 import com.rhseung.modulus.tool.ToolPart
+import com.rhseung.modulus.tool.ToolPartType
 import com.rhseung.modulus.tool.ToolPosition
 import com.rhseung.modulus.tool.ToolType
 import com.rhseung.modulus.tool.component.ToolPartsComponent
-import com.rhseung.modulus.util.ARGBColor
 import com.rhseung.modulus.util.RGBColor
 import com.rhseung.modulus.util.Utils.colored
 import com.rhseung.modulus.util.Utils.plus
 import com.rhseung.modulus.util.Utils.titlecase
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.*
@@ -24,6 +24,7 @@ import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.registry.Registries
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 
 class ToolItem private constructor(
     name: String,
@@ -153,6 +154,15 @@ class ToolItem private constructor(
             );
 
             return ToolItem(name, toolType, settings);
+        }
+
+        fun getModelId(toolType: ToolType): Identifier {
+            return Modulus.id(toolType.name);
+        }
+
+        fun getPartModelId(toolType: ToolType, partType: ToolPartType): Identifier {
+            require(partType.position in toolType.everyPartPositions) { "PartType($partType) is not in ToolType($toolType)" };
+            return Modulus.id("${toolType.name}/${partType.name}");
         }
 
         fun getToolPartsComponent(itemStack: ItemStack): ToolPartsComponent {

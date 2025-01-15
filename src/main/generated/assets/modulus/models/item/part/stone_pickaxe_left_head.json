@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "modulus:item/part/pickaxe_left_head"
-  }
-}

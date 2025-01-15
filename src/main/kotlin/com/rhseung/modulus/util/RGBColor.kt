@@ -104,6 +104,18 @@ open class RGBColor {
 
     constructor(rgb: Int) : this((rgb shr 16) and 0xFF, (rgb shr 8) and 0xFF, rgb and 0xFF);
 
+    fun r(): Float {
+        return r;
+    }
+
+    fun g(): Float {
+        return g;
+    }
+
+    fun b(): Float {
+        return b;
+    }
+
     fun rgb(): Int {
         return (R shl 16) or (G shl 8) or B;
     }

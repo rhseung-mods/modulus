@@ -25,6 +25,10 @@ class ARGBColor : RGBColor {
 
     constructor(alpha: Int, rgb: RGBColor) : this(alpha, rgb.R, rgb.G, rgb.B);
 
+    fun a(): Float {
+        return a;
+    }
+
     fun argb(): Int {
         return (A shl 24) or rgb();
     }

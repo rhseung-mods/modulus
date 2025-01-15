@@ -1,13 +1,13 @@
 package com.rhseung.modulus.datagen
 
 import com.rhseung.modulus.Modulus
-import com.rhseung.modulus.init.ModItems
 import com.rhseung.modulus.item.ToolItem
+import com.rhseung.modulus.item.ToolPartItem
 import com.rhseung.modulus.tool.ToolPartType
+import com.rhseung.modulus.tool.ToolType
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.minecraft.data.client.*
-import net.minecraft.util.Identifier
 import java.util.*
 
 class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
@@ -31,21 +31,33 @@ class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
 //    }
 
     override fun generateItemModels(itemModel: ItemModelGenerator) {
-        (ModItems.TOOLS.values + ModItems.DIAMOND_PICKAXE).forEach { tool ->
-            item("handheld").upload(ModelIds.getItemModelId(tool), TextureMap(), itemModel.writer);
+        // only parent tool model
+        ToolType.entries.forEach { toolType ->
+            val model = item("handheld");
+            val id = ToolItem.getModelId(toolType).withPrefixedPath("item/");
+
+            model.upload(id, TextureMap(), itemModel.writer);
         };
 
-        // 파츠 아이템 자체 모델
-        ModItems.PARTS.values.forEach { part ->
-            val texture = Modulus.id("part/${part.toolPart.partType.name.lowercase()}").withPrefixedPath("item/");
-            Models.GENERATED.upload(ModelIds.getItemModelId(part), TextureMap.layer0(texture), itemModel.writer);
-        };
-
-        // 도구에 레이어로 쌓이는 파츠 모델
+        // part item model
         ToolPartType.VALUES.forEach { partType ->
-            val id = Modulus.id("tool/${partType.name}").withPrefixedPath("item/");
-            Models.HANDHELD.upload(id, TextureMap.layer0(id), itemModel.writer);
+            val model = Models.GENERATED;
+            val id = ToolPartItem.getModelId(partType).withPrefixedPath("item/");
+
+            model.upload(id, TextureMap.layer0(id), itemModel.writer);
         };
+
+        // tool part layer model
+        ToolType.entries.forEach { toolType ->
+            ToolPartType.VALUES.forEach { partType ->
+                if (partType.position in toolType.everyPartPositions) {
+                    val model = Models.HANDHELD;
+                    val id = ToolItem.getPartModelId(toolType, partType).withPrefixedPath("item/");
+
+                    model.upload(id, TextureMap.layer0(id), itemModel.writer);
+                }
+            };
+        }
     }
 
     companion object {

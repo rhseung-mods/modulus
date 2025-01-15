@@ -14,7 +14,7 @@ object Modulus : ModInitializer {
     val LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	fun id(path: String): Identifier {
-		return Identifier.of(MOD_ID, path);
+		return Identifier.of(MOD_ID, path.lowercase());
 	}
 
 	override fun onInitialize() {

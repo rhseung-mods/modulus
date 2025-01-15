@@ -29,7 +29,7 @@ object ModItems : IModInit {
         ToolPreType.entries.map { preToolType -> Pair(
             (material to preToolType),
             ToolItem.of(
-                "${material.name}_${preToolType.name.lowercase()}",    // todo: name mapping (pickaxe, axe, adze etc)
+                "${material.name}_${preToolType.name.lowercase()}",
                 preToolType.toolType,
                 preToolType.withSameMaterial(material)
             )
