@@ -7,9 +7,9 @@ import com.rhseung.modulus.tool.ToolPosition
 import com.rhseung.modulus.tool.ToolTier
 import com.rhseung.modulus.tool.ToolType
 import com.rhseung.modulus.util.ARGBColor
+import com.rhseung.modulus.util.Ingredient
 import net.minecraft.block.Block
 import net.minecraft.entity.attribute.EntityAttributes
-import net.minecraft.item.Item
 import net.minecraft.registry.tag.TagKey
 
 class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<ToolPosition, ToolPart>) {
@@ -31,9 +31,9 @@ class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<Too
     val durability: Int = toolMaterials.sumOf { it.durability };
 
     /**
-     * repairTags = list of repair tags of all materials
+     * repairables = list of repairable items of all materials
      */
-    val repairTags: List<TagKey<Item>> = toolMaterials.map { it.repairTag };
+    val repairables: Ingredient = toolMaterials.fold(Ingredient.EMPTY) { acc, material -> acc + material.repairable };
 
     /**
      * attackDamage = sum of base attack damage to all parts + sum of bonus attack damage to all materials
@@ -78,8 +78,9 @@ class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<Too
         if (durability <= 0)
             throw IllegalArgumentException("Durability must be positive: $durability for $toolPartByPosition");
 
-        if (attackSpeed <= -EntityAttributes.ATTACK_SPEED.value().defaultValue)     // -4f
-            throw IllegalArgumentException("Attack speed must be positive: $attackSpeed for $toolPartByPosition");
+        val defaultAttackSpeed = EntityAttributes.ATTACK_SPEED.value().defaultValue;
+        if (attackSpeed + defaultAttackSpeed <= 0)     // -4f
+            throw IllegalArgumentException("Attack speed must be positive: ${attackSpeed + defaultAttackSpeed} for $toolPartByPosition");
     }
 
     operator fun get(position: ToolPosition): ToolPart? = toolPartByPosition[position];

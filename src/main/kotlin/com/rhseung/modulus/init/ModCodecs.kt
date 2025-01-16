@@ -5,23 +5,35 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.rhseung.modulus.tool.*
 import com.rhseung.modulus.tool.component.ToolPartsComponent
 import com.rhseung.modulus.util.ARGBColor
+import com.rhseung.modulus.util.Ingredient
+import net.minecraft.item.Item
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
 
 object ModCodecs : IModInit {
     val TOOL_TIER: Codec<ToolTier> = Codec.INT.xmap({ it -> ToolTier.entries[it] }, ToolTier::ordinal);
 
+    val TOOL_MATERIAL_TYPE: Codec<ToolMaterialType> = Codec.STRING.xmap(ToolMaterialType::valueOf, ToolMaterialType::name);
+
+    val ITEM_LIST: Codec<Ingredient> = RecordCodecBuilder.create { instance ->
+        instance.group(
+            Codec.list(TagKey.codec(RegistryKeys.ITEM)).fieldOf("tags").forGetter(Ingredient::tags),
+            Codec.list(Item.ENTRY_CODEC).fieldOf("items").forGetter(Ingredient::items)
+        ).apply(instance, ::Ingredient)
+    };
+
     val TOOL_MATERIAL: Codec<ToolMaterial> = RecordCodecBuilder.create { instance ->
         instance.group(
             Codec.STRING.fieldOf("name").forGetter(ToolMaterial::name),
             ARGBColor.Companion.CODEC.fieldOf("color").forGetter(ToolMaterial::color),
             TOOL_TIER.fieldOf("tier").forGetter(ToolMaterial::tier),
+            TOOL_MATERIAL_TYPE.fieldOf("type").forGetter(ToolMaterial::type),
             Codec.INT.fieldOf("durability").forGetter(ToolMaterial::durability),
             Codec.INT.fieldOf("enchantment_value").forGetter(ToolMaterial::enchantmentValue),
             Codec.FLOAT.fieldOf("bonus_attack_damage").forGetter(ToolMaterial::bonusAttackDamage),
             Codec.FLOAT.fieldOf("bonus_attack_speed").forGetter(ToolMaterial::bonusAttackSpeed),
             Codec.FLOAT.fieldOf("mining_speed").forGetter(ToolMaterial::miningSpeed),
-            TagKey.codec(RegistryKeys.ITEM).fieldOf("repair_tag").forGetter(ToolMaterial::repairTag)
+            ITEM_LIST.fieldOf("repairable").forGetter(ToolMaterial::repairable)
         ).apply(instance, ::ToolMaterial)
     };
 
@@ -31,6 +43,7 @@ object ModCodecs : IModInit {
         instance.group(
             Codec.STRING.fieldOf("name").forGetter(ToolPartType::name),
             TOOL_POSITION.fieldOf("position").forGetter(ToolPartType::position),
+            Codec.list(TOOL_MATERIAL_TYPE).fieldOf("appliable_material_types").forGetter(ToolPartType::appliableMaterialTypes),
             Codec.FLOAT.fieldOf("base_attack_damage").forGetter(ToolPartType::baseAttackDamage),
             Codec.FLOAT.fieldOf("base_attack_speed").forGetter(ToolPartType::baseAttackSpeed),
             Codec.list(TagKey.codec(RegistryKeys.BLOCK)).fieldOf("mineable_block_tags").forGetter(ToolPartType::mineableBlockTags)

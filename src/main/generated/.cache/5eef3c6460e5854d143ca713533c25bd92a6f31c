@@ -1,13 +1,15 @@
-// 1.21.3	2025-01-15T00:57:33.842968	Modulus/Model Definitions
-c8c668f2c11a615f3d871a0ca516c6ed3fa34dcf assets\modulus\models\item\double\axe_head.json
+// 1.21.3	2025-01-16T19:28:20.4024259	Modulus/Model Definitions
 774c71f0b37dc09bf5dcc22d02875c741a253426 assets\modulus\models\item\single\handle.json
 488b8611217eec4c28ab7064e32b596f31b93d8c assets\modulus\models\item\double\butt_head.json
 da6703e4e1f226b056bc7020d5b7f328b94a72d9 assets\modulus\models\item\part\pickaxe_left_head.json
+37da2af5bdb53112d5da6cfc274d985fe40a000e assets\modulus\models\item\part\axe_right_head.json
 17ad4dad1d3dc74c2d4bc754e15a2494cd97c80b assets\modulus\models\item\single\grip.json
 cdf4aa8fc17f707fc7e68e2d38c9e5350938fcae assets\modulus\models\item\part\butt_head.json
 bdc2a0f635ed9dcc3763538d429b3963de53400d assets\modulus\models\item\part\binding.json
 a61a213caa1df8cbb9762bd3b5288bab4d50075b assets\modulus\models\item\double\binding.json
+4031718e2347a1c62753f497d33907de73129f4d assets\modulus\models\item\double\axe_left_head.json
 4bc5ffe755c2274054e63605d5ba6c7e7c2c07a6 assets\modulus\models\item\double.json
+60a2fa006e24edacb6472cf72782c2b0a08d66a2 assets\modulus\models\item\part\axe_left_head.json
 3acc963d5ca316cb74a0634eed9628c7c19fbb83 assets\modulus\models\item\part\extra.json
 610c56b489ef222bcac7738f070e0f42f7c78a4a assets\modulus\models\item\double\handle.json
 85c4852d129203508f5bd71ebc3e2b1f1a81a700 assets\modulus\models\item\double\extra.json
@@ -17,10 +19,10 @@ ca512ac500b8f01d9f2af536a83089684a750e4c assets\modulus\models\item\double\picka
 542cd3650659a0a37b8ed4f00f7333e4feb9e13a assets\modulus\models\item\part\handle.json
 f04bcb8379e31c4132b1d3a7987ed147804961b9 assets\modulus\models\item\part\grip.json
 4bc5ffe755c2274054e63605d5ba6c7e7c2c07a6 assets\modulus\models\item\single.json
-ac87d94caade56752612ab44533ea366df1e4add assets\modulus\models\item\part\axe_head.json
-7a4133c0df50710e96d38d017706687290794396 assets\modulus\models\item\part\shovel_head.json
 3deaaf5df31f84e92a5c76a5b3ad20c2e9791b1a assets\modulus\models\item\single\binding.json
+7a4133c0df50710e96d38d017706687290794396 assets\modulus\models\item\part\shovel_head.json
 69f544bdb0c65674e9b71d554a6ba7e5e45303d7 assets\modulus\models\item\single\extra.json
+cf9b9c293da568facb4b8ab72aba0efddb0ad522 assets\modulus\models\item\double\axe_right_head.json
 d773076687e32b38765fde669716f7d3a3bea6fb assets\modulus\models\item\single\shovel_head.json
 10587b25349911e0d90184460677c2be9b6c12b7 assets\modulus\models\item\part\pickaxe_right_head.json
 20dbe2b6e62bd593b0114bd5cacb101b8d378214 assets\modulus\models\item\part\hoe_head.json

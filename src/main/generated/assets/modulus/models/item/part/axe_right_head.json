@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "modulus:item/part/axe_head"
+    "layer0": "modulus:item/part/axe_right_head"
   }
 }

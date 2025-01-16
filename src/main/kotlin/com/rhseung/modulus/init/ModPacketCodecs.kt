@@ -1,6 +1,7 @@
 package com.rhseung.modulus.init
 
 import com.rhseung.modulus.tool.ToolMaterial
+import com.rhseung.modulus.tool.ToolMaterialType
 import com.rhseung.modulus.tool.ToolPart
 import com.rhseung.modulus.tool.ToolPartType
 import com.rhseung.modulus.tool.component.ToolPartsComponent
@@ -9,6 +10,7 @@ import com.rhseung.modulus.tool.ToolTier
 import com.rhseung.modulus.tool.ToolTier.entries
 import com.rhseung.modulus.tool.ToolType
 import com.rhseung.modulus.util.ARGBColor
+import com.rhseung.modulus.util.Ingredient
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
@@ -17,7 +19,7 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
 
 object ModPacketCodecs : IModInit {
-    private fun <B, C, T1, T2, T3, T4, T5, T6, T7, T8, T9> tuple(
+    private fun <B, C, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> tuple(
         codec1: PacketCodec<in B, T1>,
         from1: (C) -> T1,
         codec2: PacketCodec<in B, T2>,
@@ -36,7 +38,9 @@ object ModPacketCodecs : IModInit {
         from8: (C) -> T8,
         codec9: PacketCodec<in B, T9>,
         from9: (C) -> T9,
-        to: (T1, T2, T3, T4, T5, T6, T7, T8, T9) -> C
+        codec10: PacketCodec<in B, T10>,
+        from10: (C) -> T10,
+        to: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) -> C
     ): PacketCodec<B, C> {
         return object : PacketCodec<B, C> {
             override fun decode(buf: B): C {
@@ -49,7 +53,8 @@ object ModPacketCodecs : IModInit {
                 val obj7: T7 = codec7.decode(buf);
                 val obj8: T8 = codec8.decode(buf);
                 val obj9: T9 = codec9.decode(buf);
-                return to(obj1, obj2, obj3, obj4, obj5, obj6, obj7, obj8, obj9);
+                val obj10: T10 = codec10.decode(buf);
+                return to(obj1, obj2, obj3, obj4, obj5, obj6, obj7, obj8, obj9, obj10);
             }
 
             override fun encode(buf: B, value: C) {
@@ -62,22 +67,32 @@ object ModPacketCodecs : IModInit {
                 codec7.encode(buf, from7(value));
                 codec8.encode(buf, from8(value));
                 codec9.encode(buf, from9(value));
+                codec10.encode(buf, from10(value));
             }
         };
     }
     
     val TOOL_TIER: PacketCodec<ByteBuf, ToolTier> = PacketCodecs.INTEGER.xmap({ it -> entries[it] }, ToolTier::ordinal);
 
+    val TOOL_MATERIAL_TYPE: PacketCodec<ByteBuf, ToolMaterialType> = PacketCodecs.STRING.xmap(ToolMaterialType::valueOf, ToolMaterialType::name);
+
+    val ITEM_LIST: PacketCodec<RegistryByteBuf, Ingredient> = PacketCodec.tuple(
+        TagKey.packetCodec(RegistryKeys.ITEM).collect(PacketCodecs.toList()), Ingredient::tags,
+        PacketCodecs.registryEntry(RegistryKeys.ITEM).collect(PacketCodecs.toList()), Ingredient::items,
+        ::Ingredient
+    );
+
     val TOOL_MATERIAL: PacketCodec<RegistryByteBuf, ToolMaterial> = tuple(
         PacketCodecs.STRING, ToolMaterial::name,
         ARGBColor.PACKET_CODEC, ToolMaterial::color,
         TOOL_TIER, ToolMaterial::tier,
+        TOOL_MATERIAL_TYPE, ToolMaterial::type,
         PacketCodecs.INTEGER, ToolMaterial::durability,
         PacketCodecs.INTEGER, ToolMaterial::enchantmentValue,
         PacketCodecs.FLOAT, ToolMaterial::bonusAttackDamage,
         PacketCodecs.FLOAT, ToolMaterial::bonusAttackSpeed,
         PacketCodecs.FLOAT, ToolMaterial::miningSpeed,
-        TagKey.packetCodec(RegistryKeys.ITEM), ToolMaterial::repairTag,
+        ITEM_LIST, ToolMaterial::repairable,
         ::ToolMaterial
     );
 
@@ -86,6 +101,7 @@ object ModPacketCodecs : IModInit {
     val TOOL_PART_TYPE: PacketCodec<ByteBuf, ToolPartType> = PacketCodec.tuple(
         PacketCodecs.STRING, ToolPartType::name,
         TOOL_POSITION, ToolPartType::position,
+        TOOL_MATERIAL_TYPE.collect(PacketCodecs.toList()), ToolPartType::appliableMaterialTypes,
         PacketCodecs.FLOAT, ToolPartType::baseAttackDamage,
         PacketCodecs.FLOAT, ToolPartType::baseAttackSpeed,
         TagKey.packetCodec(RegistryKeys.BLOCK).collect(PacketCodecs.toList()), ToolPartType::mineableBlockTags,

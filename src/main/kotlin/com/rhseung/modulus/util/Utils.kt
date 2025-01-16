@@ -9,7 +9,7 @@ import kotlin.text.Regex
 
 object Utils {
     fun String.titlecase(): String {
-        return this.split(Regex(" +")).joinToString(" ") {
+        return this.lowercase().split(Regex(" +")).joinToString(" ") {
             it.split("_").joinToString(" ") { it.replaceFirstChar { it.uppercase() } }
         };
     }
@@ -24,6 +24,10 @@ object Utils {
 
     infix fun String.colored(color: RGBColor): MutableText {
         return Text.literal(this).withColor(color.toInt());
+    }
+
+    infix fun MutableText.colored(color: RGBColor): MutableText {
+        return this.withColor(color.toInt());
     }
 
     @Throws(NoSuchFieldException::class)

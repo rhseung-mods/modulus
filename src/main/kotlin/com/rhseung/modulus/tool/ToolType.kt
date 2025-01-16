@@ -8,8 +8,8 @@ enum class ToolType(
         listOf(
             ToolPosition.HANDLE,
             ToolPosition.HEAD.mainPosition(),
-            ToolPosition.BINDING,
         ), listOf(
+            ToolPosition.BINDING,
             ToolPosition.GRIP,
             ToolPosition.EXTRA
         )
@@ -20,8 +20,8 @@ enum class ToolType(
             ToolPosition.HANDLE,
             ToolPosition.RIGHT_HEAD,
             ToolPosition.LEFT_HEAD.mainPosition(),
-            ToolPosition.BINDING,
         ), listOf(
+            ToolPosition.BINDING,
             ToolPosition.GRIP,
             ToolPosition.EXTRA
         )
@@ -42,25 +42,25 @@ enum class ToolType(
     fun isNecessaryPart(part: ToolPart) = part.partType.position in necessaryPartPositions;
 
     fun withPartTypes(vararg partTypes: ToolPartType): Map<ToolPosition, ToolPartType> {
-        require(partTypes.map { it.position }.containsAll(everyPartPositions)) { "ToolType $name does not have part types $everyPartPositions" };
+        require(partTypes.map { it.position }.containsAll(everyPartPositions)) { "${partTypes.toList()} does not have part types $everyPartPositions" };
 
         return partTypes.associateBy { it.position };
     }
 
     fun withNecessaryPartTypes(vararg partTypes: ToolPartType): Map<ToolPosition, ToolPartType> {
-        require(partTypes.map { it.position }.containsAll(necessaryPartPositions))  { "ToolType $name does not have necessary part types $necessaryPartPositions" };
+        require(partTypes.map { it.position }.containsAll(necessaryPartPositions))  { "${partTypes.toList()} does not have necessary part types $necessaryPartPositions" };
 
         return partTypes.associateBy { it.position };
     }
 
     fun withParts(vararg parts: ToolPart): Map<ToolPosition, ToolPart> {
-        require(parts.map { it.partType.position }.containsAll(everyPartPositions)) { "ToolType $name does not have parts $everyPartPositions" };
+        require(parts.map { it.partType.position }.containsAll(everyPartPositions)) { "${parts.toList()} does not have parts $everyPartPositions" };
 
         return parts.associateBy { it.partType.position };
     }
 
     fun withNecessaryParts(vararg parts: ToolPart): Map<ToolPosition, ToolPart> {
-        require(parts.map { it.partType.position }.containsAll(necessaryPartPositions)) { "ToolType $name does not have necessary parts $necessaryPartPositions" };
+        require(parts.map { it.partType.position }.containsAll(necessaryPartPositions)) { "${parts.toList()} does not have necessary parts $necessaryPartPositions" };
 
         return parts.associateBy { it.partType.position };
     }

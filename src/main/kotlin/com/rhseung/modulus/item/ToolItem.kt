@@ -1,12 +1,11 @@
 package com.rhseung.modulus.item
 
 import com.rhseung.modulus.Modulus
+import com.rhseung.modulus.datagen.LanguageProvider
+import com.rhseung.modulus.datagen.LanguageProvider.Words
 import com.rhseung.modulus.init.ModComponents
 import com.rhseung.modulus.init.ModItemGroups
-import com.rhseung.modulus.tool.ToolPart
-import com.rhseung.modulus.tool.ToolPartType
-import com.rhseung.modulus.tool.ToolPosition
-import com.rhseung.modulus.tool.ToolType
+import com.rhseung.modulus.tool.*
 import com.rhseung.modulus.tool.component.ToolPartsComponent
 import com.rhseung.modulus.util.RGBColor
 import com.rhseung.modulus.util.Utils.colored
@@ -32,18 +31,25 @@ class ToolItem private constructor(
     settings: Settings
 ) : InitializableItem(name, ModItemGroups.TOOLS, settings) {
 
-    // todo: 내구도 분리
-    // todo: crack particle tint
-    // todo: name map
+    // todo: structured durability
 
     override fun getName(stack: ItemStack): Text {
         val toolPartsComponent = getToolPartsComponent(stack);
         val mainPart = toolPartsComponent[toolType.mainPartPosition]!!;
+        val synergy = ToolSynergy.entries.find { toolPartsComponent.toolPartTypes.containsAll(it.partTypes) };
 
-        return Text.of("${mainPart.toolMaterial.name} ${toolType.name.lowercase()}".titlecase());
+        return if (synergy != null)
+            mainPart.toolMaterial.getName() + ScreenTexts.space() + synergy.getName();
+        else
+            mainPart.toolMaterial.getName() + ScreenTexts.space() + Words.TOOL.getName();
     }
 
-    override fun appendTooltip(stack: ItemStack, context: TooltipContext, tooltip: MutableList<Text>, type: TooltipType) {
+    override fun appendTooltip(
+        stack: ItemStack,
+        context: TooltipContext,
+        tooltip: MutableList<Text>,
+        type: TooltipType
+    ) {
         super.appendTooltip(stack, context, tooltip, type);
 
         val toolPartsComponent = getToolPartsComponent(stack);
@@ -57,13 +63,7 @@ class ToolItem private constructor(
         }
 
         toolPartsComponent.forEachIndexed { i, _, part ->
-            val toolMaterial = part.toolMaterial;
-            val partType = part.partType;
-
-            tooltip.add(
-                ("» " colored RGBColor.DARK_GRAY) +
-                ("${toolMaterial.name} ${partType.name}".titlecase() colored toolMaterial.color)
-            );
+            tooltip.add(("» " colored RGBColor.DARK_GRAY) + (part.getName() colored part.toolMaterial.color));
         }
     }
 
@@ -112,13 +112,13 @@ class ToolItem private constructor(
              * [com.rhseung.modulus.mixin.ItemStackMixin] 에서 구현됨
              * @see RepairableComponent
              */
-            val repairTags = toolPartsComponent.repairTags;
+            val repairTags = toolPartsComponent.repairables;
 
             /**
              * @see AttributeModifiersComponent
              */
             val attackDamage = toolPartsComponent.attackDamage;
-            val attackSpeed = toolPartsComponent.attackSpeed;   // todo: reach도 구현
+            val attackSpeed = toolPartsComponent.attackSpeed;
             val attributeModifiers = AttributeModifiersComponent.builder()
                 .add(
                     EntityAttributes.ATTACK_DAMAGE,
@@ -144,7 +144,8 @@ class ToolItem private constructor(
              */
             val miningSpeed = toolPartsComponent.miningSpeed;
             val maxTier = toolPartsComponent.maxTier;
-            val neverDroppingRule = ToolComponent.Rule.ofNeverDropping(blockRegistryLookup.getOrThrow(maxTier.incorrectBlockTag));
+            val neverDroppingRule =
+                ToolComponent.Rule.ofNeverDropping(blockRegistryLookup.getOrThrow(maxTier.incorrectBlockTag));
             val alwaysDroppingRules = toolPartsComponent.mineableBlockTags.map {
                 ToolComponent.Rule.ofAlwaysDropping(blockRegistryLookup.getOrThrow(it), miningSpeed.toFloat())
             }.toTypedArray();

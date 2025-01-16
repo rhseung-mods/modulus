@@ -16,7 +16,7 @@ public abstract class ItemStackMixin {
 
 		if (itemStack.getItem() instanceof ToolItem) {
 			var toolParts = ToolItem.Companion.getToolPartsComponent(itemStack);
-			cir.setReturnValue(toolParts.getRepairTags().stream().anyMatch(ingredient::isIn));
+			cir.setReturnValue(toolParts.getRepairables().contains(ingredient));
 
 //			var durabilities = ModularToolItem.Companion.getStructuredDurabilityComponent(itemStack);
 //			var repairTags = durabilities.getBrokenParts().stream().map(part -> part.getToolMaterial().getRepairTag());
