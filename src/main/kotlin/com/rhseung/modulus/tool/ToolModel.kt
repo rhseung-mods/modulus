@@ -106,8 +106,10 @@ class ToolModel(val stack: ItemStack, val toolTypeModel: BakedModel, val models:
     }
 
     override fun getParticleSprite(): Sprite {
-        val mainPart = toolPartsComponent[toolType.mainPartPosition]!!;
-        val mainPartItem = ModItems.PARTS[mainPart.toolMaterial to mainPart.partType]!!;
+        val mainPart = toolPartsComponent[toolType.mainPartPosition]
+            ?: throw IllegalArgumentException("Missing main part: ${toolType.mainPartPosition} in $toolPartsComponent");
+        val mainPartItem = ModItems.PARTS[mainPart]
+            ?: throw IllegalArgumentException("Missing main part item: $mainPart in ${ModItems.PARTS}");
 
         return models.getModel(ToolPartItem.getModelId(mainPartItem.partType)).particleSprite;
     }

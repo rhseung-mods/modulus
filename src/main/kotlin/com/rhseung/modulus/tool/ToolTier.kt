@@ -6,12 +6,14 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.TagKey
 
-enum class ToolTier(incorrectBlockTag: TagKey<Block>? = null, newMineableBlockTag: TagKey<Block>? = null) {
+enum class ToolTier(incorrectBlockTag: TagKey<Block>? = null, newMineableBlockTag: TagKey<Block>? = null): Translatable {
     WOOD(BlockTags.INCORRECT_FOR_WOODEN_TOOL),
     STONE(BlockTags.INCORRECT_FOR_STONE_TOOL, BlockTags.NEEDS_STONE_TOOL),
     IRON(BlockTags.INCORRECT_FOR_IRON_TOOL, BlockTags.NEEDS_IRON_TOOL),
     DIAMOND(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, BlockTags.NEEDS_DIAMOND_TOOL),
     NETHERITE(BlockTags.INCORRECT_FOR_NETHERITE_TOOL);
+
+    override val translationKey: String = Modulus.id("tier.${name.lowercase()}").toTranslationKey();
 
     val incorrectBlockTag: TagKey<Block> =
         incorrectBlockTag ?: TagKey.of(RegistryKeys.BLOCK, Modulus.id("incorrect_for_${name.lowercase()}_tool"));

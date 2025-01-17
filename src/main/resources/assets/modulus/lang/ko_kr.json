@@ -1,6 +1,12 @@
 {
     "itemGroup.modulus.parts": "모듈러스 부품",
     "itemGroup.modulus.tools": "모듈러스 도구",
+    "modulus.action.campfire_extinguish": "모닥불 소화",
+    "modulus.action.decrease_oxidation": "구리 산화 벗겨내기",
+    "modulus.action.path": "길 만들기",
+    "modulus.action.remove_wax": "밀랍 제거",
+    "modulus.action.strip": "껍질 벗기기",
+    "modulus.action.till": "경작하기",
     "modulus.material.acacia_wood": "아카시아나무",
     "modulus.material.andesite": "안산암",
     "modulus.material.bamboo_wood": "대나무",
@@ -50,6 +56,16 @@
     "modulus.synergy.hoe": "괭이",
     "modulus.synergy.pickaxe": "곡괭이",
     "modulus.synergy.shovel": "삽",
+    "modulus.tier.diamond": "다이아몬드",
+    "modulus.tier.iron": "철",
+    "modulus.tier.netherite": "네더라이트",
+    "modulus.tier.stone": "돌",
+    "modulus.tier.wood": "나무",
+    "modulus.word.action": "액션",
     "modulus.word.part": "부품",
-    "modulus.word.tool": "도구"
+    "modulus.word.tool": "도구",
+    "modulus.word.tier": "등급",
+    "modulus.word.durability": "내구도",
+    "modulus.word.mining_speed": "채굴 속도",
+    "modulus.word.enchantability": "마법성"
 }

@@ -60,10 +60,10 @@ enum class ToolSynergy(
     override val translationKey: String = Modulus.id("synergy.${name.lowercase()}").toTranslationKey();
 
     val partTypeByPosition: Map<ToolPosition, ToolPartType> =
-        toolType.withNecessaryPartTypes(*partTypes.toTypedArray());
+        toolType.withPartTypes(*partTypes.toTypedArray());
 
     fun withParts(vararg parts: ToolPart): Map<ToolPosition, ToolPart> {
-        return toolType.withNecessaryParts(*parts);
+        return toolType.withParts(*parts);
     }
 
     fun withSameMaterial(material: ToolMaterial): Map<ToolPosition, ToolPart> {

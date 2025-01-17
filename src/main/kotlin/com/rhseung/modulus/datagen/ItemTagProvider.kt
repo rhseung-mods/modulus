@@ -14,7 +14,7 @@ class ItemTagProvider(
 ) : FabricTagProvider.ItemTagProvider(output, registriesFuture) {
 
     override fun configure(lookUp: RegistryWrapper.WrapperLookup) {
-        (ModItems.TOOLS.values + ModItems.DIAMOND_PICKAXE).forEach { tool ->
+        (ModItems.TOOLS.values + ModItems.TEMPORALS.values).forEach { tool ->
             when (tool.toolType) {
 //                ToolType.SWORD -> {
 //                    getOrCreateTagBuilder(ItemTags.SWORD_ENCHANTABLE).add(tool);

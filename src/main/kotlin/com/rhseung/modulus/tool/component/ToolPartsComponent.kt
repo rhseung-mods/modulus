@@ -1,5 +1,6 @@
 package com.rhseung.modulus.tool.component
 
+import com.rhseung.modulus.tool.ToolAction
 import com.rhseung.modulus.tool.ToolMaterial
 import com.rhseung.modulus.tool.ToolPart
 import com.rhseung.modulus.tool.ToolPartType
@@ -10,6 +11,7 @@ import com.rhseung.modulus.util.ARGBColor
 import com.rhseung.modulus.util.Ingredient
 import net.minecraft.block.Block
 import net.minecraft.entity.attribute.EntityAttributes
+import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.TagKey
 
 class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<ToolPosition, ToolPart>) {
@@ -19,6 +21,8 @@ class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<Too
     val toolPartTypes: List<ToolPartType> = toolParts.map { it.partType };
     val toolMaterials: List<ToolMaterial> = toolParts.map { it.toolMaterial };
     val size: Int = toolPartByPosition.size;
+
+    val mainPart = get(toolType.mainPartPosition);
 
     /**
      * enchantability = sum of enchantability of all materials
@@ -55,14 +59,19 @@ class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<Too
     val miningSpeed: Double = toolMaterials.sumOf { it.miningSpeed.toDouble() };
 
     /**
-     * miningLevel = max mining level of all materials
+     * miningLevel = max mining level of main part
      */
-    val maxTier: ToolTier = toolMaterials.maxBy { it.tier.level }.tier;
+    val maxTier: ToolTier = mainPart?.toolMaterial?.tier ?: ToolTier.WOOD;
 
     /**
      * mineableBlockTags = list of mineable block tags of all materials
      */
     val mineableBlockTags: List<TagKey<Block>> = toolPartTypes.flatMap { it.mineableBlockTags };
+
+    /**
+     * actions = list of actions of main part
+     */
+    val actions: List<ToolAction> = mainPart?.partType?.actions ?: emptyList();
 
     init {
         val necessaryPartPositions = toolType.necessaryPartPositions;

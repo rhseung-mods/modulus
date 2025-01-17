@@ -5,6 +5,7 @@ import com.rhseung.modulus.init.ModComponents
 import com.rhseung.modulus.init.ModItemGroups
 import com.rhseung.modulus.init.ModItems
 import com.rhseung.modulus.init.ModPacketCodecs
+import com.rhseung.modulus.init.ModSerializers
 import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
@@ -23,5 +24,6 @@ object Modulus : ModInitializer {
 		ModItemGroups.initialize();
 		ModItems.initialize();
 		ModPacketCodecs.initialize();
+		ModSerializers.initialize();
 	}
 }

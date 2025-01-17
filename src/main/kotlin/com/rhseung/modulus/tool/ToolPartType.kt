@@ -8,18 +8,23 @@ import net.minecraft.registry.tag.TagKey
 open class ToolPartType(
     val name: String,
     val position: ToolPosition,
-    val appliableMaterialTypes: List<ToolMaterialType>,
+    appliableMaterialTypes: List<ToolMaterialType>,
     val baseAttackDamage: Float,
     val baseAttackSpeed: Float,
-    val mineableBlockTags: List<TagKey<Block>> = emptyList()
+    val mineableBlockTags: List<TagKey<Block>> = emptyList(),
+    val actions: List<ToolAction> = emptyList()
 ): Translatable {
+
     constructor(
         name: String,
         position: ToolPosition,
         baseAttackDamage: Float,
         baseAttackSpeed: Float,
-        mineableBlockTags: List<TagKey<Block>> = emptyList()
-    ) : this(name, position, ToolMaterialType.entries, baseAttackDamage, baseAttackSpeed, mineableBlockTags);
+        mineableBlockTags: List<TagKey<Block>> = emptyList(),
+        actions: List<ToolAction> = emptyList()
+    ) : this(name, position, ToolMaterialType.entries, baseAttackDamage, baseAttackSpeed, mineableBlockTags, actions);
+
+    val appliableMaterialTypes: List<ToolMaterialType> = (appliableMaterialTypes + ToolMaterialType.ALL).distinct();
 
     override val translationKey: String = Modulus.id("part.$name").toTranslationKey();
 
@@ -51,11 +56,23 @@ open class ToolPartType(
     }
 
     init {
-        VALUES.add(this);
+        VALUES_WITH_EMPTY.add(this);
+        if (!name.startsWith("default"))
+            VALUES.add(this);
     }
 
     companion object {
+        val VALUES_WITH_EMPTY = mutableListOf<ToolPartType>();
         val VALUES = mutableListOf<ToolPartType>();
+
+        val DEFAULT = ToolPosition.entries.associateWith { position ->
+            ToolPartType(
+                "default_${position.name.lowercase()}",
+                position,
+                1f,
+                1f
+            )
+        }
 
         val PICKAXE_LEFT_HEAD = ToolPartType(
             "pickaxe_left_head",
@@ -67,7 +84,7 @@ open class ToolPartType(
             ),
             0.5f,
             -0.9f,
-            listOf(BlockTags.PICKAXE_MINEABLE)
+            listOf(BlockTags.PICKAXE_MINEABLE),
         );
 
         val PICKAXE_RIGHT_HEAD = ToolPartType(
@@ -93,7 +110,8 @@ open class ToolPartType(
             ),
             5f,
             -1.5f,
-            listOf(BlockTags.AXE_MINEABLE)
+            listOf(BlockTags.AXE_MINEABLE),
+            ToolAction.AXE_ACTIONS
         );
 
         val AXE_RIGHT_HEAD = ToolPartType(
@@ -106,7 +124,8 @@ open class ToolPartType(
             ),
             5f,
             -1.5f,
-            listOf(BlockTags.AXE_MINEABLE)
+            listOf(BlockTags.AXE_MINEABLE),
+            ToolAction.AXE_ACTIONS
         );
 
         val SHOVEL_HEAD = ToolPartType(
@@ -119,7 +138,8 @@ open class ToolPartType(
             ),
             1.5f,
             -3f,
-            listOf(BlockTags.SHOVEL_MINEABLE)
+            listOf(BlockTags.SHOVEL_MINEABLE),
+            ToolAction.SHOVEL_ACTIONS
         );
 
         val HOE_HEAD = ToolPartType(
@@ -132,7 +152,8 @@ open class ToolPartType(
             ),
             0f,
             -1.5f,
-            listOf(BlockTags.HOE_MINEABLE)
+            listOf(BlockTags.HOE_MINEABLE),
+            ToolAction.HOE_ACTIONS
         );
 
         val BUTT_HEAD = ToolPartType(

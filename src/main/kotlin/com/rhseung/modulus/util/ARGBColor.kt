@@ -41,6 +41,16 @@ class ARGBColor : RGBColor {
         return "#${Integer.toHexString(argb())}";
     }
 
+    override fun equals(other: Any?): Boolean {
+        return other is ARGBColor && other.A == A && super.equals(other);
+    }
+
+    override fun hashCode(): Int {
+        var result = A.hashCode();
+        result = 31 * result + super.hashCode();
+        return result;
+    }
+
     override fun darker(delta: Float): ARGBColor {
         return ARGBColor(A, H, S, V - delta);
     }

@@ -14,6 +14,16 @@ data class ToolPart(val partType: ToolPartType, val toolMaterial: ToolMaterial) 
         return "$toolMaterial/$partType";
     }
 
+    override fun equals(other: Any?): Boolean {
+        return other is ToolPart && other.partType == partType && other.toolMaterial == toolMaterial;
+    }
+
+    override fun hashCode(): Int {
+        var result = partType.hashCode()
+        result = 31 * result + toolMaterial.hashCode()
+        return result
+    }
+
     fun getName(): MutableText {
         return toolMaterial.getName() + ScreenTexts.space() + partType.getName();
     }

@@ -22,7 +22,7 @@ object ModItemGroups : IModInit {
     override fun initialize() {
         Registry.register(Registries.ITEM_GROUP, TOOLS.value, FabricItemGroup.builder()
             .displayName(Text.translatable(TOOLS_NAME))
-            .icon { ItemStack(ModItems.DIAMOND_PICKAXE) }
+            .icon { ItemStack(ModItems.TOOLS.values.first()) }
             .build()
         );
 

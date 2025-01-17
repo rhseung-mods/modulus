@@ -1,4 +1,4 @@
-// 1.21.3	2025-01-16T19:28:20.4024259	Modulus/Model Definitions
+// 1.21.3	2025-01-17T22:53:09.2376199	Modulus/Model Definitions
 774c71f0b37dc09bf5dcc22d02875c741a253426 assets\modulus\models\item\single\handle.json
 488b8611217eec4c28ab7064e32b596f31b93d8c assets\modulus\models\item\double\butt_head.json
 da6703e4e1f226b056bc7020d5b7f328b94a72d9 assets\modulus\models\item\part\pickaxe_left_head.json
@@ -19,8 +19,8 @@ ca512ac500b8f01d9f2af536a83089684a750e4c assets\modulus\models\item\double\picka
 542cd3650659a0a37b8ed4f00f7333e4feb9e13a assets\modulus\models\item\part\handle.json
 f04bcb8379e31c4132b1d3a7987ed147804961b9 assets\modulus\models\item\part\grip.json
 4bc5ffe755c2274054e63605d5ba6c7e7c2c07a6 assets\modulus\models\item\single.json
-3deaaf5df31f84e92a5c76a5b3ad20c2e9791b1a assets\modulus\models\item\single\binding.json
 7a4133c0df50710e96d38d017706687290794396 assets\modulus\models\item\part\shovel_head.json
+3deaaf5df31f84e92a5c76a5b3ad20c2e9791b1a assets\modulus\models\item\single\binding.json
 69f544bdb0c65674e9b71d554a6ba7e5e45303d7 assets\modulus\models\item\single\extra.json
 cf9b9c293da568facb4b8ab72aba0efddb0ad522 assets\modulus\models\item\double\axe_right_head.json
 d773076687e32b38765fde669716f7d3a3bea6fb assets\modulus\models\item\single\shovel_head.json

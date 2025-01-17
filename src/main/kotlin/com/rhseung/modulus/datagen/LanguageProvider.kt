@@ -3,9 +3,11 @@ package com.rhseung.modulus.datagen
 import com.rhseung.modulus.Modulus
 import com.rhseung.modulus.init.ModItemGroups
 import com.rhseung.modulus.init.ModItems
+import com.rhseung.modulus.tool.ToolAction
 import com.rhseung.modulus.tool.ToolMaterial
 import com.rhseung.modulus.tool.ToolPartType
 import com.rhseung.modulus.tool.ToolSynergy
+import com.rhseung.modulus.tool.ToolTier
 import com.rhseung.modulus.tool.Translatable
 import com.rhseung.modulus.util.Utils.titlecase
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
@@ -31,6 +33,11 @@ class LanguageProvider(
 
         val PART = Word("part");
         val TOOL = Word("tool");
+        val TIER = Word("tier");
+        val DURABILITY = Word("durability");
+        val MINING_SPEED = Word("mining_speed");
+        val ENCHANTABILITY = Word("enchantability");
+        val ACTION = Word("action");
     }
 
     override fun generateTranslations(lookUp: RegistryWrapper.WrapperLookup, translationBuilder: TranslationBuilder) {
@@ -47,6 +54,14 @@ class LanguageProvider(
 
         ToolSynergy.entries.forEach { synergy ->
             translationBuilder.add(synergy.translationKey, synergy.name.titlecase());
+        }
+
+        ToolTier.entries.forEach { tier ->
+            translationBuilder.add(tier.translationKey, tier.name.titlecase());
+        }
+
+        ToolAction.VALUES.forEach { action ->
+            translationBuilder.add(action.translationKey, action.name.titlecase());
         }
 
         Words.VALUES.forEach { word ->

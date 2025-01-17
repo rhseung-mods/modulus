@@ -6,6 +6,8 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.item.ToolMaterial
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
+import net.minecraft.text.MutableText
+import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import kotlin.math.roundToInt
 
@@ -136,12 +138,27 @@ open class RGBColor {
         return "#${Integer.toHexString(rgb())}";
     }
 
+    override fun equals(other: Any?): Boolean {
+        return other is RGBColor && other.R == R && other.G == G && other.B == B;
+    }
+
+    override fun hashCode(): Int {
+        var result = R
+        result = 31 * result + G
+        result = 31 * result + B
+        return result
+    }
+
     open fun darker(delta: Float): RGBColor {
         return RGBColor(H, S, V - delta);
     }
 
     open fun brighter(delta: Float): RGBColor {
         return RGBColor(H, S, V + delta);
+    }
+
+    operator fun invoke(text: String): MutableText {
+        return Text.literal(text).withColor(this.toInt());
     }
 
     companion object {

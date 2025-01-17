@@ -1,5 +1,6 @@
 package com.rhseung.modulus.init
 
+import com.rhseung.modulus.tool.ToolAction
 import com.rhseung.modulus.tool.ToolMaterial
 import com.rhseung.modulus.tool.ToolMaterialType
 import com.rhseung.modulus.tool.ToolPart
@@ -98,6 +99,8 @@ object ModPacketCodecs : IModInit {
 
     val TOOL_POSITION: PacketCodec<ByteBuf, ToolPosition> = PacketCodecs.STRING.xmap(ToolPosition::valueOf, ToolPosition::name);
 
+    val TOOL_ACTION: PacketCodec<ByteBuf, ToolAction> = PacketCodecs.STRING.xmap(ToolAction::fromName, ToolAction::name);
+
     val TOOL_PART_TYPE: PacketCodec<ByteBuf, ToolPartType> = PacketCodec.tuple(
         PacketCodecs.STRING, ToolPartType::name,
         TOOL_POSITION, ToolPartType::position,
@@ -105,6 +108,7 @@ object ModPacketCodecs : IModInit {
         PacketCodecs.FLOAT, ToolPartType::baseAttackDamage,
         PacketCodecs.FLOAT, ToolPartType::baseAttackSpeed,
         TagKey.packetCodec(RegistryKeys.BLOCK).collect(PacketCodecs.toList()), ToolPartType::mineableBlockTags,
+        TOOL_ACTION.collect(PacketCodecs.toList()), ToolPartType::actions,
         ::ToolPartType
     );
 

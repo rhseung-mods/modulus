@@ -9,6 +9,7 @@ import com.rhseung.modulus.util.Ingredient
 import net.minecraft.item.Item
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
+import net.minecraft.util.dynamic.Codecs
 
 object ModCodecs : IModInit {
     val TOOL_TIER: Codec<ToolTier> = Codec.INT.xmap({ it -> ToolTier.entries[it] }, ToolTier::ordinal);
@@ -33,11 +34,13 @@ object ModCodecs : IModInit {
             Codec.FLOAT.fieldOf("bonus_attack_damage").forGetter(ToolMaterial::bonusAttackDamage),
             Codec.FLOAT.fieldOf("bonus_attack_speed").forGetter(ToolMaterial::bonusAttackSpeed),
             Codec.FLOAT.fieldOf("mining_speed").forGetter(ToolMaterial::miningSpeed),
-            ITEM_LIST.fieldOf("repairable").forGetter(ToolMaterial::repairable)
+            ITEM_LIST.fieldOf("repairable").forGetter(ToolMaterial::repairable),
         ).apply(instance, ::ToolMaterial)
     };
 
     val TOOL_POSITION: Codec<ToolPosition> = Codec.STRING.xmap(ToolPosition::valueOf, ToolPosition::name);
+
+    val TOOL_ACTION: Codec<ToolAction> = Codec.STRING.xmap(ToolAction::fromName, ToolAction::name);
 
     val TOOL_PART_TYPE: Codec<ToolPartType> = RecordCodecBuilder.create { instance ->
         instance.group(
@@ -46,7 +49,8 @@ object ModCodecs : IModInit {
             Codec.list(TOOL_MATERIAL_TYPE).fieldOf("appliable_material_types").forGetter(ToolPartType::appliableMaterialTypes),
             Codec.FLOAT.fieldOf("base_attack_damage").forGetter(ToolPartType::baseAttackDamage),
             Codec.FLOAT.fieldOf("base_attack_speed").forGetter(ToolPartType::baseAttackSpeed),
-            Codec.list(TagKey.codec(RegistryKeys.BLOCK)).fieldOf("mineable_block_tags").forGetter(ToolPartType::mineableBlockTags)
+            Codec.list(TagKey.codec(RegistryKeys.BLOCK)).fieldOf("mineable_block_tags").forGetter(ToolPartType::mineableBlockTags),
+            Codec.list(TOOL_ACTION).fieldOf("actions").forGetter(ToolPartType::actions)
         ).apply(instance, ::ToolPartType);
     };
 

@@ -20,7 +20,7 @@ abstract class InitializableItem(
     settings: Settings
 ) : Item(settings.registryKey(registryKey)) {
 
-    constructor(name: String, itemGroup: RegistryKey<ItemGroup>, settings: Settings) : this(
+    constructor(name: String, itemGroup: RegistryKey<ItemGroup>?, settings: Settings) : this(
         name,
         itemGroup,
         Modulus.id(name),

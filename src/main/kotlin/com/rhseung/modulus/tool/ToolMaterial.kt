@@ -22,13 +22,41 @@ data class ToolMaterial(
 
     init {
         VALUES_WITH_EMPTY.add(this);
-        if (this.name != "empty") {
+        if (!this.name.startsWith("default"))
             VALUES.add(this);
-        }
     }
 
     override fun toString(): String {
         return name.uppercase();
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return other is ToolMaterial &&
+            other.name == name &&
+            other.color == color &&
+            other.tier == tier &&
+            other.type == type &&
+            other.durability == durability &&
+            other.enchantmentValue == enchantmentValue &&
+            other.bonusAttackDamage == bonusAttackDamage &&
+            other.bonusAttackSpeed == bonusAttackSpeed &&
+            other.miningSpeed == miningSpeed &&
+            other.repairable == repairable;
+    }
+
+    override fun hashCode(): Int {
+        var result = durability
+        result = 31 * result + enchantmentValue
+        result = 31 * result + bonusAttackDamage.hashCode()
+        result = 31 * result + bonusAttackSpeed.hashCode()
+        result = 31 * result + miningSpeed.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + color.hashCode()
+        result = 31 * result + tier.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + repairable.hashCode()
+        result = 31 * result + translationKey.hashCode()
+        return result
     }
 
     override val translationKey: String = Modulus.id("material.${name}").toTranslationKey();
@@ -37,17 +65,17 @@ data class ToolMaterial(
         val VALUES_WITH_EMPTY = mutableListOf<ToolMaterial>();
         val VALUES = mutableListOf<ToolMaterial>();
 
-//        val EMPTY = ToolMaterial(
-//            "empty",
-//            Colors.TRANSPARENT,
-//            ToolTier.WOOD,
-//            ToolMaterialType.ALL,
-//            0,
-//            0,
-//            0f,
-//            0f,
-//            0f,
-//        );
+        val DEFAULT = ToolMaterial(
+            "default",
+            Colors.TRANSPARENT,
+            ToolTier.WOOD,
+            ToolMaterialType.ALL,
+            10,
+            10,
+            0f,
+            0f,
+            10f,
+        );
 
         val WOOD = ToolMaterial(
             "wood",

@@ -13,6 +13,16 @@ class Ingredient {
         return "ItemList(tags=$tags, items=$items)";
     }
 
+    override fun equals(other: Any?): Boolean {
+        return other is Ingredient && other.tags == tags && other.items == items;
+    }
+
+    override fun hashCode(): Int {
+        var result = tags.hashCode()
+        result = 31 * result + items.hashCode()
+        return result
+    }
+
     constructor(vararg tags: TagKey<Item>) {
         this.tags.addAll(tags);
     }
