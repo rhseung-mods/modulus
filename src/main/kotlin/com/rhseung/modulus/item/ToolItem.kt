@@ -8,6 +8,7 @@ import com.rhseung.modulus.tool.component.ToolPartsComponent
 import com.rhseung.modulus.util.RGBColor
 import com.rhseung.modulus.util.Utils.colored
 import com.rhseung.modulus.util.Utils.plus
+import net.minecraft.block.Block
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.*
@@ -16,12 +17,12 @@ import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
 import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryEntryLookup
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.RegistryWrapper
@@ -30,6 +31,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
+import net.minecraft.world.World
 
 class ToolItem private constructor(
     name: String,
@@ -91,56 +93,61 @@ class ToolItem private constructor(
         }
 
         toolPartsComponent.forEachIndexed { i, _, part ->
-            tooltip.add(("» " colored RGBColor.DARK_GRAY) + (part.getName() colored part.toolMaterial.color));
+            tooltip.add(("» " colored RGBColor.DARK_GRAY) + (part.getName() colored part.toolMaterial.colorPalette.mainColor));
         }
     }
 
-    fun useOnBlock(stack: ItemStack, context: ItemUsageContext): ActionResult {
+    override fun useOnBlock(context: ItemUsageContext): ActionResult {
+        val stack = context.stack;
+        if (stack.item !is ToolItem)
+            return ActionResult.PASS;
+
         val toolPartsComponent = getToolPartsComponent(stack);
-
-        toolPartsComponent.actions.forEach { action ->
-            val ret = action(context);
-            if (ret is ActionResult.Success)
-                return ret;
-        }
-
-        return ActionResult.PASS;
+        return if (toolPartsComponent.actions.any { it(context) is ActionResult.Success })
+            ActionResult.SUCCESS;
+        else
+            ActionResult.PASS;
     }
 
-// todo: ToolAction 다양화
-//    override fun useOnEntity(
-//        stack: ItemStack?,
-//        user: PlayerEntity?,
-//        entity: LivingEntity?,
-//        hand: Hand?
-//    ): ActionResult? {
-//        return super.useOnEntity(stack, user, entity, hand)
-//    }
+    override fun useOnEntity(
+        stack: ItemStack,
+        user: PlayerEntity,
+        entity: LivingEntity,
+        hand: Hand
+    ): ActionResult {
+        if (stack.item !is ToolItem)
+            return ActionResult.PASS;
+
+        val toolPartsComponent = getToolPartsComponent(stack);
+        return if (toolPartsComponent.actions.any { it(stack, user, entity, hand) is ActionResult.Success })
+            ActionResult.SUCCESS;
+        else
+            ActionResult.PASS;
+    }
+
+    override fun use(world: World, user: PlayerEntity, hand: Hand): ActionResult {
+        val stack = user.getStackInHand(hand);
+        if (stack.item !is ToolItem)
+            return ActionResult.PASS;
+
+        val toolPartsComponent = getToolPartsComponent(stack);
+        return if (toolPartsComponent.actions.any { it(world, user, hand) is ActionResult.Success })
+            ActionResult.SUCCESS;
+        else
+            ActionResult.PASS;
+    }
 
     companion object {
-        fun update(
-            stack: ItemStack,
-            toolType: ToolType,
-            toolParts: Map<ToolPosition, ToolPart>,
-            registries: RegistryWrapper.WrapperLookup
-        ) {
-            val blockRegistryLookup = registries.getOrThrow(RegistryKeys.BLOCK);
+        private fun getEnchantableComponent(toolPartsComponent: ToolPartsComponent): EnchantableComponent {
+            return EnchantableComponent(toolPartsComponent.enchantmentValue);
+        }
 
-            val toolPartsComponent = ToolPartsComponent(toolType, toolParts);
-            stack.set(ModComponents.TOOL_PARTS, toolPartsComponent);
-
-            val durability = toolPartsComponent.durability;
-            stack.set(DataComponentTypes.DAMAGE, stack.damage.coerceAtMost(durability));
-            stack.set(DataComponentTypes.MAX_DAMAGE, durability);
-
-            val enchantmentValue = toolPartsComponent.enchantmentValue;
-            stack.set(DataComponentTypes.ENCHANTABLE, EnchantableComponent(enchantmentValue));
-
-            val builder = AttributeModifiersComponent.builder()
+        private fun getAttributeModifiersComponent(toolPartsComponent: ToolPartsComponent): AttributeModifiersComponent {
+            return AttributeModifiersComponent.builder()
                 .add(
                     EntityAttributes.ATTACK_DAMAGE,
                     EntityAttributeModifier(
-                        Item.BASE_ATTACK_DAMAGE_MODIFIER_ID,
+                        BASE_ATTACK_DAMAGE_MODIFIER_ID,
                         toolPartsComponent.attackDamage,
                         Operation.ADD_VALUE
                     ),
@@ -148,22 +155,42 @@ class ToolItem private constructor(
                 ).add(
                     EntityAttributes.ATTACK_SPEED,
                     EntityAttributeModifier(
-                        Item.BASE_ATTACK_SPEED_MODIFIER_ID,
+                        BASE_ATTACK_SPEED_MODIFIER_ID,
                         toolPartsComponent.attackSpeed,
                         Operation.ADD_VALUE
                     ),
                     AttributeModifierSlot.MAINHAND
-                );
-            stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder.build());
+                ).build();
+        }
 
+        private fun getToolComponent(toolPartsComponent: ToolPartsComponent, blockRegistryLookup: RegistryEntryLookup<Block>): ToolComponent {
             val miningSpeed = toolPartsComponent.miningSpeed;
             val maxTier = toolPartsComponent.maxTier;
+
             val neverDroppingRule =
                 ToolComponent.Rule.ofNeverDropping(blockRegistryLookup.getOrThrow(maxTier.incorrectBlockTag));
-            val alwaysDroppingRules = toolPartsComponent.mineableBlockTags.map {
-                ToolComponent.Rule.ofAlwaysDropping(blockRegistryLookup.getOrThrow(it), miningSpeed.toFloat())
-            }.toTypedArray();
-            stack.set(DataComponentTypes.TOOL, ToolComponent(listOf(neverDroppingRule, *alwaysDroppingRules), 1f, 1));
+            val alwaysDroppingRules = toolPartsComponent.mineableBlockTags.map { tag ->
+                ToolComponent.Rule.ofAlwaysDropping(blockRegistryLookup.getOrThrow(tag), miningSpeed.toFloat())
+            };
+
+            return ToolComponent(listOf(neverDroppingRule, *alwaysDroppingRules.toTypedArray()), 1f, 1);
+        }
+
+        fun update(
+            stack: ItemStack,
+            toolType: ToolType,
+            toolParts: Map<ToolPosition, ToolPart>,
+            registries: RegistryWrapper.WrapperLookup
+        ) {
+            val blockRegistryLookup: RegistryWrapper.Impl<Block> = registries.getOrThrow(RegistryKeys.BLOCK);
+            val toolPartsComponent = ToolPartsComponent(toolType, toolParts);
+
+            stack.set(ModComponents.TOOL_PARTS, toolPartsComponent);
+            stack.set(DataComponentTypes.DAMAGE, stack.damage.coerceAtMost(toolPartsComponent.durability));
+            stack.set(DataComponentTypes.MAX_DAMAGE, toolPartsComponent.durability);
+            stack.set(DataComponentTypes.ENCHANTABLE, getEnchantableComponent(toolPartsComponent));
+            stack.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, getAttributeModifiersComponent(toolPartsComponent));
+            stack.set(DataComponentTypes.TOOL, getToolComponent(toolPartsComponent, blockRegistryLookup));
         }
 
         fun of(
@@ -172,25 +199,8 @@ class ToolItem private constructor(
             toolType: ToolType,
             toolParts: Map<ToolPosition, ToolPart>
         ): ToolItem {
-            val itemRegistryLookup = Registries.createEntryLookup(Registries.ITEM);
-            val blockRegistryLookup = Registries.createEntryLookup(Registries.BLOCK);
-
-            var settings = Settings();
-
-            /**
-             * @see ToolPartsComponent
-             */
+            val blockRegistryLookup: RegistryEntryLookup<Block> = Registries.createEntryLookup(Registries.BLOCK);
             val toolPartsComponent = ToolPartsComponent(toolType, toolParts);
-            settings = settings.component(
-                ModComponents.TOOL_PARTS,
-                toolPartsComponent
-            );
-
-            /**
-             * maxDamage is durability of the tool
-             */
-            val durability = toolPartsComponent.durability;
-            settings = settings.maxDamage(durability);
 
 //            /**
 //             * @see StructuredDurabilityComponent
@@ -201,57 +211,12 @@ class ToolItem private constructor(
 //                durabilityComponent
 //            ).maxCount(1);
 
-            /**
-             * @see EnchantableComponent
-             */
-            val enchantmentValue = toolPartsComponent.enchantmentValue;
-            settings = settings.enchantable(enchantmentValue);
-
-            /**
-             * [com.rhseung.modulus.mixin.ItemStackMixin] 에서 구현됨
-             * @see RepairableComponent
-             */
-            val repairTags = toolPartsComponent.repairables;
-
-            /**
-             * @see AttributeModifiersComponent
-             */
-            val attackDamage = toolPartsComponent.attackDamage;
-            val attackSpeed = toolPartsComponent.attackSpeed;
-            val attributeModifiers = AttributeModifiersComponent.builder()
-                .add(
-                    EntityAttributes.ATTACK_DAMAGE,
-                    EntityAttributeModifier(
-                        Item.BASE_ATTACK_DAMAGE_MODIFIER_ID,
-                        attackDamage,
-                        Operation.ADD_VALUE
-                    ),
-                    AttributeModifierSlot.MAINHAND
-                ).add(
-                    EntityAttributes.ATTACK_SPEED,
-                    EntityAttributeModifier(
-                        Item.BASE_ATTACK_SPEED_MODIFIER_ID,
-                        attackSpeed,
-                        Operation.ADD_VALUE
-                    ),
-                    AttributeModifierSlot.MAINHAND
-                )
-            settings = settings.attributeModifiers(attributeModifiers.build());
-
-            /**
-             * @see ToolComponent
-             */
-            val miningSpeed = toolPartsComponent.miningSpeed;
-            val maxTier = toolPartsComponent.maxTier;
-            val neverDroppingRule =
-                ToolComponent.Rule.ofNeverDropping(blockRegistryLookup.getOrThrow(maxTier.incorrectBlockTag));
-            val alwaysDroppingRules = toolPartsComponent.mineableBlockTags.map {
-                ToolComponent.Rule.ofAlwaysDropping(blockRegistryLookup.getOrThrow(it), miningSpeed.toFloat())
-            }.toTypedArray();
-            settings = settings.component(
-                DataComponentTypes.TOOL,
-                ToolComponent(listOf(neverDroppingRule, *alwaysDroppingRules), 1f, 1)
-            );
+            val settings = Settings();
+            settings.component(ModComponents.TOOL_PARTS, toolPartsComponent);
+            settings.maxDamage(toolPartsComponent.durability);
+            settings.component(DataComponentTypes.ENCHANTABLE, getEnchantableComponent(toolPartsComponent));
+            settings.component(DataComponentTypes.ATTRIBUTE_MODIFIERS, getAttributeModifiersComponent(toolPartsComponent));
+            settings.component(DataComponentTypes.TOOL, getToolComponent(toolPartsComponent, blockRegistryLookup));
 
             return ToolItem(name, itemGroup, toolType, settings);
         }

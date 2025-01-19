@@ -77,6 +77,25 @@ class ARGBColor : RGBColor {
             ::ARGBColor
         );
 
-        val EMPTY = ARGBColor(0, RGBColor.WHITE);
+        val EMPTY = WHITE.zeroAlpha();
+
+        /**
+         * @see net.minecraft.client.texture.atlas.PalettedPermutationsAtlasSource.toMapper
+         */
+        fun toMapper(from: List<ARGBColor>, to: List<ARGBColor>): (ARGBColor) -> ARGBColor {
+            if (from.size != to.size)
+                throw IllegalArgumentException("from(${from.size} and to(${to.size}) must have the same size");
+
+            val map = from.map(ARGBColor::zeroAlpha).zip(to).toMap();
+
+            return lamb@{ color ->
+                if (color.A == 0)
+                    return@lamb color;
+                else {
+                    val ret: ARGBColor = map.getOrDefault(color.zeroAlpha(), color.fullAlpha());
+                    return@lamb ret.withAlpha(color.A * ret.A / 255);
+                }
+            };
+        }
     }
 }

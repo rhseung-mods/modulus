@@ -1,15 +1,14 @@
 package com.rhseung.modulus.tool
 
 import com.rhseung.modulus.Modulus
-import com.rhseung.modulus.util.ARGBColor
-import com.rhseung.modulus.util.Colors
+import com.rhseung.modulus.util.ColorPalette
 import com.rhseung.modulus.util.Ingredient
 import net.minecraft.item.Items
 import net.minecraft.registry.tag.ItemTags
 
 data class ToolMaterial(
     val name: String,
-    val color: ARGBColor,
+    val colorPalette: ColorPalette,
     val tier: ToolTier,
     val type: ToolMaterialType,
     val durability: Int,
@@ -33,7 +32,7 @@ data class ToolMaterial(
     override fun equals(other: Any?): Boolean {
         return other is ToolMaterial &&
             other.name == name &&
-            other.color == color &&
+            other.colorPalette == colorPalette &&
             other.tier == tier &&
             other.type == type &&
             other.durability == durability &&
@@ -51,7 +50,7 @@ data class ToolMaterial(
         result = 31 * result + bonusAttackSpeed.hashCode()
         result = 31 * result + miningSpeed.hashCode()
         result = 31 * result + name.hashCode()
-        result = 31 * result + color.hashCode()
+        result = 31 * result + colorPalette.hashCode()
         result = 31 * result + tier.hashCode()
         result = 31 * result + type.hashCode()
         result = 31 * result + repairable.hashCode()
@@ -65,9 +64,11 @@ data class ToolMaterial(
         val VALUES_WITH_EMPTY = mutableListOf<ToolMaterial>();
         val VALUES = mutableListOf<ToolMaterial>();
 
+        // todo: resin
+
         val DEFAULT = ToolMaterial(
             "default",
-            Colors.TRANSPARENT,
+            ColorPalette.DEFAULT,
             ToolTier.WOOD,
             ToolMaterialType.ALL,
             10,
@@ -79,7 +80,7 @@ data class ToolMaterial(
 
         val WOOD = ToolMaterial(
             "wood",
-            Colors.WOOD,
+            ColorPalette.WOOD,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -92,7 +93,7 @@ data class ToolMaterial(
 
         val OAK_WOOD = ToolMaterial(
             "oak_wood",
-            Colors.OAK_WOOD,
+            ColorPalette.OAK_WOOD,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -105,7 +106,7 @@ data class ToolMaterial(
 
         val SPRUCE_WOOD = ToolMaterial(
             "spruce_wood",
-            Colors.SPRUCE_WOOD,
+            ColorPalette.SPRUCE_WOOD,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -118,7 +119,7 @@ data class ToolMaterial(
 
         val BIRCH_WOOD = ToolMaterial(
             "birch_wood",
-            Colors.BIRCH_WOOD,
+            ColorPalette.BIRCH_WOOD,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -131,7 +132,7 @@ data class ToolMaterial(
 
         val JUNGLE_WOOD = ToolMaterial(
             "jungle_wood",
-            Colors.JUNGLE_WOOD,
+            ColorPalette.JUNGLE_WOOD,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -144,7 +145,7 @@ data class ToolMaterial(
 
         val ACACIA_WOOD = ToolMaterial(
             "acacia_wood",
-            Colors.ACACIA_WOOD,
+            ColorPalette.ACACIA_WOOD,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -157,7 +158,7 @@ data class ToolMaterial(
 
         val DARK_OAK_WOOD = ToolMaterial(
             "dark_oak_wood",
-            Colors.DARK_OAK_WOOD,
+            ColorPalette.DARK_OAK_WOOD,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -170,7 +171,7 @@ data class ToolMaterial(
 
         val BAMBOO_WOOD = ToolMaterial(
             "bamboo_wood",
-            Colors.BAMBOO_WOOD,
+            ColorPalette.BAMBOO_WOOD,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -183,7 +184,7 @@ data class ToolMaterial(
 
         val CHERRY_WOOD = ToolMaterial(
             "cherry_wood",
-            Colors.CHERRY_WOOD,
+            ColorPalette.CHERRY_WOOD,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -196,7 +197,7 @@ data class ToolMaterial(
 
         val MANGROVE_WOOD = ToolMaterial(
             "mangrove_wood",
-            Colors.MANGROVE_WOOD,
+            ColorPalette.MANGROVE_WOOD,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -209,7 +210,7 @@ data class ToolMaterial(
 
         val PALE_OAK_WOOD = ToolMaterial(
             "pale_oak_wood",
-            Colors.PALE_OAK_WOOD,
+            ColorPalette.PALE_OAK_WOOD,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -222,7 +223,7 @@ data class ToolMaterial(
 
         val CRIMSON_HYPHAE = ToolMaterial(
             "crimson_hyphae",
-            Colors.CRIMSON_HYPHAE,
+            ColorPalette.CRIMSON_HYPHAE,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -235,7 +236,7 @@ data class ToolMaterial(
 
         val WARPED_HYPHAE = ToolMaterial(
             "warped_hyphae",
-            Colors.WARPED_HYPHAE,
+            ColorPalette.WARPED_HYPHAE,
             ToolTier.WOOD,
             ToolMaterialType.WOOD,
             15,
@@ -248,7 +249,7 @@ data class ToolMaterial(
 
         val STONE = ToolMaterial(
             "stone",
-            Colors.STONE,
+            ColorPalette.STONE,
             ToolTier.STONE,
             ToolMaterialType.STONE,
             35,
@@ -261,7 +262,7 @@ data class ToolMaterial(
 
         val COBBLESTONE = ToolMaterial(
             "cobblestone",
-            Colors.COBBLESTONE,
+            ColorPalette.COBBLESTONE,
             ToolTier.STONE,
             ToolMaterialType.STONE,
             35,
@@ -274,7 +275,7 @@ data class ToolMaterial(
 
         val DEEPSLATE = ToolMaterial(
             "deepslate",
-            Colors.DEEPSLATE,
+            ColorPalette.DEEPSLATE,
             ToolTier.STONE,
             ToolMaterialType.STONE,
             35,
@@ -287,7 +288,7 @@ data class ToolMaterial(
 
         val COBBLED_DEEPSLATE = ToolMaterial(
             "cobbled_deepslate",
-            Colors.COBBLED_DEEPSLATE,
+            ColorPalette.COBBLED_DEEPSLATE,
             ToolTier.STONE,
             ToolMaterialType.STONE,
             35,
@@ -300,7 +301,7 @@ data class ToolMaterial(
 
         val FLINT = ToolMaterial(
             "flint",
-            Colors.FLINT,
+            ColorPalette.FLINT,
             ToolTier.STONE,
             ToolMaterialType.STONE,
             35,
@@ -313,7 +314,7 @@ data class ToolMaterial(
 
         val GRANITE = ToolMaterial(
             "granite",
-            Colors.GRANITE,
+            ColorPalette.GRANITE,
             ToolTier.STONE,
             ToolMaterialType.STONE,
             35,
@@ -326,7 +327,7 @@ data class ToolMaterial(
 
         val DIORITE = ToolMaterial(
             "diorite",
-            Colors.DIORITE,
+            ColorPalette.DIORITE,
             ToolTier.STONE,
             ToolMaterialType.STONE,
             35,
@@ -339,7 +340,7 @@ data class ToolMaterial(
 
         val ANDESITE = ToolMaterial(
             "andesite",
-            Colors.ANDESITE,
+            ColorPalette.ANDESITE,
             ToolTier.STONE,
             ToolMaterialType.STONE,
             35,
@@ -352,7 +353,7 @@ data class ToolMaterial(
 
         val BLACKSTONE = ToolMaterial(
             "blackstone",
-            Colors.BLACKSTONE,
+            ColorPalette.BLACKSTONE,
             ToolTier.STONE,
             ToolMaterialType.STONE,
             35,
@@ -365,7 +366,7 @@ data class ToolMaterial(
 
         val BASALT = ToolMaterial(
             "basalt",
-            Colors.BASALT,
+            ColorPalette.BASALT,
             ToolTier.STONE,
             ToolMaterialType.STONE,
             35,
@@ -378,7 +379,7 @@ data class ToolMaterial(
 
         val OBSIDIAN = ToolMaterial(
             "obsidian",
-            Colors.OBSIDIAN,
+            ColorPalette.OBSIDIAN,
             ToolTier.STONE,
             ToolMaterialType.STONE,
             35,
@@ -391,7 +392,7 @@ data class ToolMaterial(
 
         val GOLD = ToolMaterial(
             "gold",
-            Colors.GOLD,
+            ColorPalette.GOLD,
             ToolTier.WOOD,
             ToolMaterialType.METAL,
             10,
@@ -404,7 +405,7 @@ data class ToolMaterial(
 
         val COPPER = ToolMaterial(
             "copper",
-            Colors.COPPER,
+            ColorPalette.COPPER,
             ToolTier.STONE,
             ToolMaterialType.METAL,
             45,
@@ -417,7 +418,7 @@ data class ToolMaterial(
 
         val IRON = ToolMaterial(
             "iron",
-            Colors.IRON,
+            ColorPalette.IRON,
             ToolTier.IRON,
             ToolMaterialType.METAL,
             65,
@@ -430,7 +431,7 @@ data class ToolMaterial(
 
         val DIAMOND = ToolMaterial(
             "diamond",
-            Colors.DIAMOND,
+            ColorPalette.DIAMOND,
             ToolTier.DIAMOND,
             ToolMaterialType.METAL,
             400,
@@ -443,7 +444,7 @@ data class ToolMaterial(
 
         val NETHERITE = ToolMaterial(
             "netherite",
-            Colors.NETHERITE,
+            ColorPalette.NETHERITE,
             ToolTier.NETHERITE,
             ToolMaterialType.METAL,
             510,
@@ -456,7 +457,7 @@ data class ToolMaterial(
 
         val STRING = ToolMaterial(
             "string",
-            Colors.STRING,
+            ColorPalette.STRING,
             ToolTier.WOOD,
             ToolMaterialType.FIBER,
             15,
@@ -469,7 +470,7 @@ data class ToolMaterial(
 
         val LEATHER = ToolMaterial(
             "leather",
-            Colors.LEATHER,
+            ColorPalette.LEATHER,
             ToolTier.WOOD,
             ToolMaterialType.FIBER,
             15,
@@ -482,7 +483,7 @@ data class ToolMaterial(
 
         val RABBIT_HIDE = ToolMaterial(
             "rabbit_hide",
-            Colors.RABBIT_HIDE,
+            ColorPalette.RABBIT_HIDE,
             ToolTier.WOOD,
             ToolMaterialType.FIBER,
             15,

@@ -19,7 +19,7 @@ public class CrackParticleMixin {
         if (stack.getItem() instanceof ToolItem) {
             var toolPartsComponent = ToolItem.Companion.getToolPartsComponent(stack);
             var tintIndex = Random.Default.nextInt(toolPartsComponent.getSize());
-            var color = toolPartsComponent.getColor(tintIndex);
+            var color = toolPartsComponent.getColorPalette(tintIndex).getMainColor();
 
             instance.setColor(color.r(), color.g(), color.b());
         }

@@ -199,6 +199,8 @@ open class RGBColor {
         val LIGHT_PURPLE = RGBColor(0xFF55FF);
         val YELLOW = RGBColor(0xFFFF55);
         val WHITE = RGBColor(0xFFFFFF);
+        val ORANGE = RGBColor(0xFFAA00);
+        val PURPLE = RGBColor(0xc10ede);
 
         val FUEL = RGBColor(0xE9B83B);
 

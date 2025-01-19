@@ -1,14 +1,11 @@
 package com.rhseung.modulus.item
 
 import com.rhseung.modulus.Modulus
-import com.rhseung.modulus.datagen.LanguageProvider
 import com.rhseung.modulus.datagen.LanguageProvider.Words
 import com.rhseung.modulus.init.ModItemGroups
 import com.rhseung.modulus.tool.ToolPart
 import com.rhseung.modulus.tool.ToolPartType
-import com.rhseung.modulus.util.Utils
 import com.rhseung.modulus.util.Utils.plus
-import com.rhseung.modulus.util.Utils.titlecase
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenTexts
@@ -31,7 +28,7 @@ class ToolPartItem(
 
     override fun clientInit() {
         ColorProviderRegistry.ITEM.register({ stack, _ ->
-            return@register toolPart.toolMaterial.color.toInt();
+            return@register toolPart.toolMaterial.colorPalette.mainColor.toInt()
         }, this);
     }
 

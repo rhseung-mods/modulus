@@ -39,17 +39,6 @@ public abstract class ItemStackMixin {
 		}
 	}
 
-	@Redirect(method = "useOnBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;useOnBlock(Lnet/minecraft/item/ItemUsageContext;)Lnet/minecraft/util/ActionResult;"))
-	private ActionResult useOnBlockMixin(Item item, ItemUsageContext context) {
-		ItemStack itemStack = (ItemStack) (Object) this;
-
-		if (item instanceof ToolItem tool) {
-			return tool.useOnBlock(itemStack, context);
-		} else {
-			return item.useOnBlock(context);
-		}
-	}
-
 //	@ModifyReturnValue(method = "isDamaged", at = @At("RETURN"))
 //	private boolean isDamagedMixin(boolean original) {
 //		ItemStack itemStack = (ItemStack) (Object) this;

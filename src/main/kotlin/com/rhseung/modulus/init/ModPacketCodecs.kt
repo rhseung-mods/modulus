@@ -10,7 +10,7 @@ import com.rhseung.modulus.tool.ToolPosition
 import com.rhseung.modulus.tool.ToolTier
 import com.rhseung.modulus.tool.ToolTier.entries
 import com.rhseung.modulus.tool.ToolType
-import com.rhseung.modulus.util.ARGBColor
+import com.rhseung.modulus.util.ColorPalette
 import com.rhseung.modulus.util.Ingredient
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryByteBuf
@@ -85,7 +85,7 @@ object ModPacketCodecs : IModInit {
 
     val TOOL_MATERIAL: PacketCodec<RegistryByteBuf, ToolMaterial> = tuple(
         PacketCodecs.STRING, ToolMaterial::name,
-        ARGBColor.PACKET_CODEC, ToolMaterial::color,
+        ColorPalette.PACKET_CODEC, ToolMaterial::colorPalette,
         TOOL_TIER, ToolMaterial::tier,
         TOOL_MATERIAL_TYPE, ToolMaterial::type,
         PacketCodecs.INTEGER, ToolMaterial::durability,

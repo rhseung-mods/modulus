@@ -7,11 +7,10 @@ import com.rhseung.modulus.tool.ToolPartType
 import com.rhseung.modulus.tool.ToolPosition
 import com.rhseung.modulus.tool.ToolTier
 import com.rhseung.modulus.tool.ToolType
-import com.rhseung.modulus.util.ARGBColor
+import com.rhseung.modulus.util.ColorPalette
 import com.rhseung.modulus.util.Ingredient
 import net.minecraft.block.Block
 import net.minecraft.entity.attribute.EntityAttributes
-import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.TagKey
 
 class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<ToolPosition, ToolPart>) {
@@ -96,7 +95,7 @@ class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<Too
 
     operator fun get(partType: ToolPartType): ToolPart? = toolParts.firstOrNull { it.partType == partType };
 
-    operator fun get(idx: Int): ToolPart? = toolParts.getOrNull(idx);
+    operator fun get(layerN: Int): ToolPart? = get(toolType.everyPartPositions[layerN]);
 
     operator fun contains(position: ToolPosition) = toolPartByPosition.contains(position);
 
@@ -108,8 +107,8 @@ class ToolPartsComponent(val toolType: ToolType, val toolPartByPosition: Map<Too
         toolPartByPosition.entries.forEachIndexed { i, (position, part) -> action(i, position, part) };
     }
 
-    fun getColor(tintIndex: Int): ARGBColor {
-        return get(toolType.everyPartPositions[tintIndex])!!.toolMaterial.color;
+    fun getColorPalette(tintIndex: Int): ColorPalette {
+        return get(tintIndex)?.toolMaterial?.colorPalette ?: ColorPalette.DEFAULT;
     }
 
     override fun toString(): String {

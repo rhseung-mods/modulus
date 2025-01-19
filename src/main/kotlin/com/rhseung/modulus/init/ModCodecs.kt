@@ -4,12 +4,11 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.rhseung.modulus.tool.*
 import com.rhseung.modulus.tool.component.ToolPartsComponent
-import com.rhseung.modulus.util.ARGBColor
+import com.rhseung.modulus.util.ColorPalette
 import com.rhseung.modulus.util.Ingredient
 import net.minecraft.item.Item
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
-import net.minecraft.util.dynamic.Codecs
 
 object ModCodecs : IModInit {
     val TOOL_TIER: Codec<ToolTier> = Codec.INT.xmap({ it -> ToolTier.entries[it] }, ToolTier::ordinal);
@@ -26,7 +25,7 @@ object ModCodecs : IModInit {
     val TOOL_MATERIAL: Codec<ToolMaterial> = RecordCodecBuilder.create { instance ->
         instance.group(
             Codec.STRING.fieldOf("name").forGetter(ToolMaterial::name),
-            ARGBColor.Companion.CODEC.fieldOf("color").forGetter(ToolMaterial::color),
+            ColorPalette.CODEC.fieldOf("color_palette").forGetter(ToolMaterial::colorPalette),
             TOOL_TIER.fieldOf("tier").forGetter(ToolMaterial::tier),
             TOOL_MATERIAL_TYPE.fieldOf("type").forGetter(ToolMaterial::type),
             Codec.INT.fieldOf("durability").forGetter(ToolMaterial::durability),
