@@ -1,6 +1,16 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "modulus:item/part/grip"
+    "layer0": "modulus:item/part/grip/0",
+    "layer1": "modulus:item/part/grip/1",
+    "layer10": "modulus:item/part/grip/10",
+    "layer2": "modulus:item/part/grip/2",
+    "layer3": "modulus:item/part/grip/3",
+    "layer4": "modulus:item/part/grip/4",
+    "layer5": "modulus:item/part/grip/5",
+    "layer6": "modulus:item/part/grip/6",
+    "layer7": "modulus:item/part/grip/7",
+    "layer8": "modulus:item/part/grip/8",
+    "layer9": "modulus:item/part/grip/9"
   }
 }

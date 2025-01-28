@@ -25,6 +25,6 @@ data class ToolPart(val partType: ToolPartType, val toolMaterial: ToolMaterial) 
     }
 
     fun getName(): MutableText {
-        return toolMaterial.getName() + ScreenTexts.space() + partType.getName();
+        return toolMaterial.getTranslationName() + ScreenTexts.space() + partType.getTranslationName();
     }
 };

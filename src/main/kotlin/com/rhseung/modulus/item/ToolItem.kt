@@ -48,9 +48,9 @@ class ToolItem private constructor(
         val synergy = ToolSynergy.entries.find { toolPartsComponent.toolPartTypes.containsAll(it.partTypes) };
 
         return if (synergy != null)
-            mainPart.toolMaterial.getName() + ScreenTexts.space() + synergy.getName();
+            mainPart.toolMaterial.getTranslationName() + ScreenTexts.space() + synergy.getTranslationName();
         else
-            mainPart.toolMaterial.getName() + ScreenTexts.space() + Words.TOOL.getName();
+            mainPart.toolMaterial.getTranslationName() + ScreenTexts.space() + Words.TOOL.getTranslationName();
     }
 
     override fun appendTooltip(
@@ -64,27 +64,27 @@ class ToolItem private constructor(
         val toolPartsComponent = getToolPartsComponent(stack);
 
         if (Screen.hasShiftDown()) {
-            val tierTitle = (Words.TIER.getName() + Text.literal(": ")) colored RGBColor.DARK_GRAY;
-            val tierContent = toolPartsComponent.maxTier.getName() colored RGBColor.GRAY;
+            val tierTitle = (Words.TIER.getTranslationName() + Text.literal(": ")) colored RGBColor.DARK_GRAY;
+            val tierContent = toolPartsComponent.maxTier.getTranslationName() colored RGBColor.GRAY;
             tooltip.add(RGBColor.DARK_AQUA(" > ") + tierTitle + tierContent);
 
-            val durabilityTitle = (Words.DURABILITY.getName() + Text.literal(": ")) colored RGBColor.DARK_GRAY;
+            val durabilityTitle = (Words.DURABILITY.getTranslationName() + Text.literal(": ")) colored RGBColor.DARK_GRAY;
             val durabilityContent = RGBColor.GRAY((stack.maxDamage - stack.damage).toString()) +
                     RGBColor.DARK_GRAY("/") +
                     RGBColor.GRAY(toolPartsComponent.durability.toString());
             tooltip.add(RGBColor.DARK_AQUA(" > ") + durabilityTitle + durabilityContent);
 
-            val miningSpeedTitle = (Words.MINING_SPEED.getName() + Text.literal(": ")) colored RGBColor.DARK_GRAY;
+            val miningSpeedTitle = (Words.MINING_SPEED.getTranslationName() + Text.literal(": ")) colored RGBColor.DARK_GRAY;
             val miningSpeedContent = toolPartsComponent.miningSpeed.toString() colored RGBColor.GRAY;
             tooltip.add(RGBColor.DARK_AQUA(" > ") + miningSpeedTitle + miningSpeedContent);
 
-            val enchantabilityTitle = (Words.ENCHANTABILITY.getName() + Text.literal(": ")) colored RGBColor.DARK_GRAY;
+            val enchantabilityTitle = (Words.ENCHANTABILITY.getTranslationName() + Text.literal(": ")) colored RGBColor.DARK_GRAY;
             val enchantabilityContent = toolPartsComponent.enchantmentValue.toString() colored RGBColor.GRAY;
             tooltip.add(RGBColor.DARK_AQUA(" > ") + enchantabilityTitle + enchantabilityContent);
 
             if (toolPartsComponent.actions.isNotEmpty()) {
-                val actionTitle = (Words.ACTION.getName() + Text.literal(": ")) colored RGBColor.DARK_GRAY;
-                val actionContents = toolPartsComponent.actions.map { (Text.literal("  - ") + it.getName()) colored RGBColor.DARK_GRAY };
+                val actionTitle = (Words.ACTION.getTranslationName() + Text.literal(": ")) colored RGBColor.DARK_GRAY;
+                val actionContents = toolPartsComponent.actions.map { (Text.literal("  - ") + it.getTranslationName()) colored RGBColor.DARK_GRAY };
                 tooltip.add(RGBColor.DARK_AQUA(" > ") + actionTitle);
                 actionContents.forEach(tooltip::add);
             }

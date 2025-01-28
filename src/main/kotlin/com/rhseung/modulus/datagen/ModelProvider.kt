@@ -5,6 +5,7 @@ import com.rhseung.modulus.item.ToolItem
 import com.rhseung.modulus.item.ToolPartItem
 import com.rhseung.modulus.tool.ToolPartType
 import com.rhseung.modulus.tool.ToolType
+import com.rhseung.modulus.util.ColorPalette
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.minecraft.data.client.*
@@ -41,20 +42,26 @@ class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
 
         // part item model
         ToolPartType.VALUES.forEach { partType ->
-            val model = Models.GENERATED;
             val id = ToolPartItem.getModelId(partType).withPrefixedPath("item/");
+            val textureKeys: Array<TextureKey> = (0..<ColorPalette.SIZE).map { TextureKey.of("layer$it") }.toTypedArray();
+            val model = item("generated", *textureKeys);
 
-            model.upload(id, TextureMap.layer0(id), itemModel.writer);
-        };
+            model.upload(id, TextureMap().apply {
+                textureKeys.forEachIndexed { index, key -> put(key, id.withSuffixedPath("/$index")) }
+            }, itemModel.writer);
+        }
 
         // tool part layer model
         ToolType.entries.forEach { toolType ->
             ToolPartType.VALUES.forEach { partType ->
                 if (partType.position in toolType.everyPartPositions) {
-                    val model = Models.HANDHELD;
                     val id = ToolItem.getPartModelId(toolType, partType).withPrefixedPath("item/");
+                    val textureKeys: Array<TextureKey> = (0..<ColorPalette.SIZE).map { TextureKey.of("layer$it") }.toTypedArray();
+                    val model = item("handheld", *textureKeys);
 
-                    model.upload(id, TextureMap.layer0(id), itemModel.writer);
+                    model.upload(id, TextureMap().apply {
+                        textureKeys.forEachIndexed { index, key -> put(key, id.withSuffixedPath("/$index")) }
+                    }, itemModel.writer);
                 }
             };
         }

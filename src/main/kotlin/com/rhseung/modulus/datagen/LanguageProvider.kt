@@ -2,7 +2,6 @@ package com.rhseung.modulus.datagen
 
 import com.rhseung.modulus.Modulus
 import com.rhseung.modulus.init.ModItemGroups
-import com.rhseung.modulus.init.ModItems
 import com.rhseung.modulus.tool.ToolAction
 import com.rhseung.modulus.tool.ToolMaterial
 import com.rhseung.modulus.tool.ToolPartType
@@ -13,8 +12,6 @@ import com.rhseung.modulus.util.Utils.titlecase
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.registry.RegistryWrapper
-import net.minecraft.text.MutableText
-import net.minecraft.text.Text
 import java.util.concurrent.CompletableFuture
 
 class LanguageProvider(

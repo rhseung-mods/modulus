@@ -6,7 +6,7 @@ import net.minecraft.text.Text
 interface Translatable {
     val translationKey: String;
 
-    fun getName(): MutableText {
+    fun getTranslationName(): MutableText {
         return Text.translatable(translationKey);
     }
 }

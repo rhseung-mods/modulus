@@ -1,5 +1,6 @@
 package com.rhseung.modulus.util
 
+import net.minecraft.client.texture.NativeImage
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
@@ -123,5 +124,13 @@ object Utils {
 
     fun <T> Any.invokeMethod(methodName: String, vararg args: Any?): T {
         return invoke(this, methodName, *args)
+    }
+
+    fun NativeImage.forEach(action: (NativeImage, Int, Int) -> Unit) {
+        for (x in 0..<this.width) {
+            for (y in 0..<this.height) {
+                action(this, x, y);
+            }
+        }
     }
 }

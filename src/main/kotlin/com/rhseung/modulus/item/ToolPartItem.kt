@@ -23,12 +23,12 @@ class ToolPartItem(
     val toolMaterial = toolPart.toolMaterial;
 
     override fun getName(stack: ItemStack): Text {
-        return toolPart.getName() + ScreenTexts.space() + Words.PART.getName();
+        return toolPart.getName() + ScreenTexts.space() + Words.PART.getTranslationName();
     }
 
     override fun clientInit() {
-        ColorProviderRegistry.ITEM.register({ stack, _ ->
-            return@register toolPart.toolMaterial.colorPalette.mainColor.toInt()
+        ColorProviderRegistry.ITEM.register({ stack, tintIndex ->
+            return@register toolPart.toolMaterial.colorPalette[tintIndex].toInt()
         }, this);
     }
 

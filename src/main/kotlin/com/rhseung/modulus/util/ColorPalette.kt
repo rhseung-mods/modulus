@@ -8,12 +8,12 @@ import net.minecraft.network.codec.PacketCodecs
 
 class ColorPalette(val mainColorIndex: Int, vararg colors: RGBColor) {
     init {
-        require(colors.size == 11) { "ColorPalette must have exactly 11 colors" }
+        require(colors.size == SIZE) { "ColorPalette must have exactly $SIZE colors" }
     }
 
-    val colors = colors.map(RGBColor::fullAlpha);
+    val colors = colors.toList();
     val size = this.colors.size;
-    val mainColor: ARGBColor = this.colors[mainColorIndex];
+    val mainColor: RGBColor = this.colors[mainColorIndex];
 
     override fun toString(): String {
         return "ColorPalette(${colors.joinToString()})";
@@ -29,27 +29,27 @@ class ColorPalette(val mainColorIndex: Int, vararg colors: RGBColor) {
         return result;
     }
 
-    operator fun get(index: Int): ARGBColor {
+    operator fun get(index: Int): RGBColor {
         return colors[index];
     }
 
     companion object {
+        const val SIZE = 11;
+
         fun fromList(mainColorIndex: Int, colors: List<RGBColor>): ColorPalette {
             return ColorPalette(mainColorIndex,*colors.toTypedArray());
         }
 
-        fun toMapper(from: ColorPalette, to: ColorPalette) = ARGBColor.toMapper(from.colors, to.colors);
-
         val CODEC: Codec<ColorPalette> = RecordCodecBuilder.create { instance ->
             instance.group(
                 Codec.INT.fieldOf("main_color_index").forGetter(ColorPalette::mainColorIndex),
-                Codec.list(ARGBColor.CODEC).fieldOf("colors").forGetter(ColorPalette::colors)
+                Codec.list(RGBColor.CODEC).fieldOf("colors").forGetter(ColorPalette::colors)
             ).apply(instance, ColorPalette::fromList)
         };
 
         val PACKET_CODEC: PacketCodec<ByteBuf, ColorPalette> = PacketCodec.tuple(
             PacketCodecs.INTEGER, ColorPalette::mainColorIndex,
-            ARGBColor.PACKET_CODEC.collect(PacketCodecs.toList()), ColorPalette::colors,
+            RGBColor.PACKET_CODEC.collect(PacketCodecs.toList()), ColorPalette::colors,
             ColorPalette::fromList
         );
 

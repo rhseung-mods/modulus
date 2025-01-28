@@ -135,7 +135,7 @@ open class RGBColor {
     }
 
     override fun toString(): String {
-        return "#${Integer.toHexString(rgb())}";
+        return "RGBColor(R=$R, G=$G, B=$B)";
     }
 
     override fun equals(other: Any?): Boolean {

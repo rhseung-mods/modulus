@@ -1,6 +1,16 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "modulus:item/double/pickaxe_left_head"
+    "layer0": "modulus:item/double/pickaxe_left_head/0",
+    "layer1": "modulus:item/double/pickaxe_left_head/1",
+    "layer10": "modulus:item/double/pickaxe_left_head/10",
+    "layer2": "modulus:item/double/pickaxe_left_head/2",
+    "layer3": "modulus:item/double/pickaxe_left_head/3",
+    "layer4": "modulus:item/double/pickaxe_left_head/4",
+    "layer5": "modulus:item/double/pickaxe_left_head/5",
+    "layer6": "modulus:item/double/pickaxe_left_head/6",
+    "layer7": "modulus:item/double/pickaxe_left_head/7",
+    "layer8": "modulus:item/double/pickaxe_left_head/8",
+    "layer9": "modulus:item/double/pickaxe_left_head/9"
   }
 }
