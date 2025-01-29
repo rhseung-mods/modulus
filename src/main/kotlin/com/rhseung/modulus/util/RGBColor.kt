@@ -135,7 +135,7 @@ open class RGBColor {
     }
 
     override fun toString(): String {
-        return "RGBColor(R=$R, G=$G, B=$B)";
+        return "#06X".format(rgb());
     }
 
     override fun equals(other: Any?): Boolean {

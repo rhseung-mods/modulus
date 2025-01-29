@@ -25,13 +25,9 @@ class ARGBColor : RGBColor {
 
     constructor(alpha: Int, rgb: RGBColor) : this(alpha, rgb.R, rgb.G, rgb.B);
 
-    fun a(): Float {
-        return a;
-    }
+    fun a() = a;
 
-    fun argb(): Int {
-        return (A shl 24) or rgb();
-    }
+    fun argb() = (A shl 24) or rgb();
 
     fun toInt(): Int {
         return argb();
@@ -42,7 +38,7 @@ class ARGBColor : RGBColor {
     }
 
     override fun toString(): String {
-        return "ARGBColor(A=$A, R=$R, G=$G, B=$B)";
+        return "#08X".format(argb());
     }
 
     override fun equals(other: Any?): Boolean {

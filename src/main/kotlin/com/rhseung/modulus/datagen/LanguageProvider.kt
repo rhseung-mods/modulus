@@ -12,6 +12,7 @@ import com.rhseung.modulus.util.Utils.titlecase
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.registry.RegistryWrapper
+import net.minecraft.util.Formatting
 import java.util.concurrent.CompletableFuture
 
 class LanguageProvider(
