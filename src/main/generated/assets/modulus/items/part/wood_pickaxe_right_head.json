@@ -1,0 +1,52 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "modulus:item/part/pickaxe_right_head",
+    "tints": [
+      {
+        "type": "blueprint:palette",
+        "index": 0
+      },
+      {
+        "type": "blueprint:palette",
+        "index": 1
+      },
+      {
+        "type": "blueprint:palette",
+        "index": 2
+      },
+      {
+        "type": "blueprint:palette",
+        "index": 3
+      },
+      {
+        "type": "blueprint:palette",
+        "index": 4
+      },
+      {
+        "type": "blueprint:palette",
+        "index": 5
+      },
+      {
+        "type": "blueprint:palette",
+        "index": 6
+      },
+      {
+        "type": "blueprint:palette",
+        "index": 7
+      },
+      {
+        "type": "blueprint:palette",
+        "index": 8
+      },
+      {
+        "type": "blueprint:palette",
+        "index": 9
+      },
+      {
+        "type": "blueprint:palette",
+        "index": 10
+      }
+    ]
+  }
+}

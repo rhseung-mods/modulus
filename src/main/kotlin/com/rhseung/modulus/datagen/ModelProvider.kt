@@ -1,95 +1,42 @@
 package com.rhseung.modulus.datagen
 
+import com.rhseung.blueprint.color.Palette
+import com.rhseung.blueprint.color.PaletteTintSource
+import com.rhseung.blueprint.util.CollectionUtils.toTextureMap
 import com.rhseung.modulus.Modulus
-import com.rhseung.modulus.item.ToolItem
-import com.rhseung.modulus.item.ToolPartItem
-import com.rhseung.modulus.tool.ToolPartType
-import com.rhseung.modulus.tool.ToolType
-import com.rhseung.modulus.util.ColorPalette
+import com.rhseung.modulus.gear.tool.model.ToolModel
+import com.rhseung.modulus.init.ModulusItems
+import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
-import net.minecraft.data.client.*
+import net.minecraft.client.data.*
+import net.minecraft.client.render.item.model.BasicItemModel
+import net.minecraft.util.Identifier
 import java.util.*
 
 class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
-    override fun generateBlockStateModels(blockModel: BlockStateModelGenerator) {}
-
-//    fun generateToolModel(tool: ToolItem, itemModel: ItemModelGenerator) {
-//        val partTypes: List<ToolPartType> = tool.toolType.partTypes + tool.toolType.optionalPartTypes;
-//        val textureKeys: Array<TextureKey> = partTypes.indices.map { TextureKey.of("layer$it") }.toTypedArray();
-//        val textureMap: Map<TextureKey, Identifier> = partTypes.zip(textureKeys).associate { (partType, textureKey) ->
-//            val textureName = partType.name;
-//            val textureId = Modulus.id(textureName).withPrefixedPath("item/");
-//            return@associate textureKey to textureId;
-//        }
-//        val model = item("handheld", *textureKeys);
-//
-//        model.upload(
-//            ModelIds.getItemModelId(tool),
-//            textureMap.entries.fold(TextureMap()) { map, entry -> map.put(entry.key, entry.value) },
-//            itemModel.writer
-//        );
-//    }
+    override fun generateBlockStateModels(blockModel: BlockStateModelGenerator) {
+    }
 
     override fun generateItemModels(itemModel: ItemModelGenerator) {
-        // only parent tool model
-        ToolType.entries.forEach { toolType ->
-            val model = item("handheld");
-            val id = ToolItem.getModelId(toolType).withPrefixedPath("item/");
+        val parts = mutableMapOf<String, BasicItemModel.Unbaked>();
+        val map: Map<String, BasicItemModel.Unbaked> = ModulusItems.PARTS.values.mapNotNull {
+            if (parts.containsKey(it.part.type.name))
+                null;
+            else {
+                parts[it.part.type.name] = it.generateModels("generated", itemModel);
+                it.part.type.name to parts[it.part.type.name]!!;
+            }
+        }.toMap();
 
-            model.upload(id, TextureMap(), itemModel.writer);
+        ModulusItems.TOOLS.values.forEach {
+            item("handheld").upload(it, TextureMap(), itemModel.modelCollector);
+            itemModel.output.accept(it, ToolModel.Unbaked(map));
         };
-
-        // part item model
-        ToolPartType.VALUES.forEach { partType ->
-            val id = ToolPartItem.getModelId(partType).withPrefixedPath("item/");
-            val textureKeys: Array<TextureKey> = (0..<ColorPalette.SIZE).map { TextureKey.of("layer$it") }.toTypedArray();
-            val model = item("generated", *textureKeys);
-
-            model.upload(id, TextureMap().apply {
-                textureKeys.forEachIndexed { index, key -> put(key, id.withSuffixedPath("/$index")) }
-            }, itemModel.writer);
-        }
-
-        // tool part layer model
-        ToolType.entries.forEach { toolType ->
-            ToolPartType.VALUES.forEach { partType ->
-                if (partType.position in toolType.everyPartPositions) {
-                    val id = ToolItem.getPartModelId(toolType, partType).withPrefixedPath("item/");
-                    val textureKeys: Array<TextureKey> = (0..<ColorPalette.SIZE).map { TextureKey.of("layer$it") }.toTypedArray();
-                    val model = item("handheld", *textureKeys);
-
-                    model.upload(id, TextureMap().apply {
-                        textureKeys.forEachIndexed { index, key -> put(key, id.withSuffixedPath("/$index")) }
-                    }, itemModel.writer);
-                }
-            };
-        }
     }
 
     companion object {
-        fun item(parent: String, vararg requiredTextureKeys: TextureKey): Model {
-            return Model(
-                Optional.of(ModelIds.getMinecraftNamespacedItem(parent)),
-                Optional.empty(),
-                *requiredTextureKeys
-            );
-        }
-
-        fun block(parent: String, vararg requiredTextureKeys: TextureKey): Model {
-            return Model(
-                Optional.of(ModelIds.getMinecraftNamespacedBlock(parent)),
-                Optional.empty(),
-                *requiredTextureKeys
-            );
-        }
-
-        fun block(parent: String, variant: String, vararg requiredTextureKeys: TextureKey): Model {
-            return Model(
-                Optional.of(ModelIds.getMinecraftNamespacedBlock(parent)),
-                Optional.of(variant),
-                *requiredTextureKeys
-            );
+        fun item(parent: String, vararg textureKey: TextureKey): Model {
+            return Model(Optional.of(Identifier.ofVanilla("item/$parent")), Optional.empty(), *textureKey);
         }
     }
 }

@@ -3,15 +3,16 @@
 	"id": "modulus",
 	"version": "${version}",
 	"name": "Modulus",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Modular Tools and Weapons, and more!",
 	"authors": [
-		"Me!"
+		"rhseung"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/mod/modulus",
+		"sources": "https://github.com/rhseung-mods/modulus",
+		"issues": "https://github.com/rhseung-mods/modulus/issues"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/modulus/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -29,7 +30,7 @@
 		],
 		"fabric-datagen": [
 			{
-				"value": "com.rhseung.modulus.ModulusData",
+				"value": "com.rhseung.modulus.ModulusDatagen",
 				"adapter": "kotlin"
 			}
 		]

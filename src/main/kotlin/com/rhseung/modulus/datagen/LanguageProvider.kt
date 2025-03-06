@@ -1,69 +1,53 @@
 package com.rhseung.modulus.datagen
 
-import com.rhseung.modulus.Modulus
-import com.rhseung.modulus.init.ModItemGroups
-import com.rhseung.modulus.tool.ToolAction
-import com.rhseung.modulus.tool.ToolMaterial
-import com.rhseung.modulus.tool.ToolPartType
-import com.rhseung.modulus.tool.ToolSynergy
-import com.rhseung.modulus.tool.ToolTier
-import com.rhseung.modulus.tool.Translatable
-import com.rhseung.modulus.util.Utils.titlecase
+import com.rhseung.blueprint.util.StringUtils.titlecase
+import com.rhseung.modulus.gear.tool.action.ToolAction
+import com.rhseung.modulus.gear.tool.material.ToolMaterial
+import com.rhseung.modulus.gear.tool.part.ToolPartType
+import com.rhseung.modulus.gear.tool.synergy.ToolSynergy
+import com.rhseung.modulus.gear.tool.type.ToolType
+import com.rhseung.modulus.init.ModulusItemGroups
+import com.rhseung.modulus.init.ModulusItems
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.registry.RegistryWrapper
-import net.minecraft.util.Formatting
 import java.util.concurrent.CompletableFuture
 
 class LanguageProvider(
     output: FabricDataOutput,
-    registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup>
-) : FabricLanguageProvider(output, "en_us", registriesFuture) {
+    registryLookup: CompletableFuture<RegistryWrapper.WrapperLookup>
+) : FabricLanguageProvider(output, registryLookup) {
 
-    object Words {
-        val VALUES = mutableListOf<Word>();
+    override fun generateTranslations(registry: RegistryWrapper.WrapperLookup, translationBuilder: TranslationBuilder) {
+        translationBuilder.add(ModulusItemGroups.TOOLS.registryKey, "Modulus Tools");
+        translationBuilder.add(ModulusItemGroups.PARTS.registryKey, "Modulus Parts");
 
-        data class Word(val name: String): Translatable {
-            override val translationKey: String = Modulus.id("word.$name").toTranslationKey();
+        ToolAction.entries.forEach {
+            translationBuilder.add(it.translationKey, it.name.titlecase());
+        };
 
-            init { VALUES.add(this); }
-        }
+        ToolMaterial.entriesNotDefault.forEach {
+            translationBuilder.add(it.translationKey, it.name.titlecase());
+        };
 
-        val PART = Word("part");
-        val TOOL = Word("tool");
-        val TIER = Word("tier");
-        val DURABILITY = Word("durability");
-        val MINING_SPEED = Word("mining_speed");
-        val ENCHANTABILITY = Word("enchantability");
-        val ACTION = Word("action");
-    }
+        ToolPartType.entriesNotDefault.forEach {
+            translationBuilder.add(it.translationKey, it.name.titlecase());
+        };
 
-    override fun generateTranslations(lookUp: RegistryWrapper.WrapperLookup, translationBuilder: TranslationBuilder) {
-        translationBuilder.add(ModItemGroups.TOOLS_NAME, "Modulus Tools");
-        translationBuilder.add(ModItemGroups.PARTS_NAME, "Modulus Parts");
+        ToolSynergy.entries.forEach {
+            translationBuilder.add(it.translationKey, it.name.titlecase());
+        };
 
-        ToolMaterial.VALUES.forEach { material ->
-            translationBuilder.add(material.translationKey, material.name.titlecase());
-        }
+        ToolType.entries.forEach {
+            translationBuilder.add(it.translationKey, it.name.titlecase());
+        };
 
-        ToolPartType.VALUES.forEach { partType ->
-            translationBuilder.add(partType.translationKey, partType.name.titlecase());
-        }
+        ModulusItems.TOOLS.values.forEach {
+            translationBuilder.add(it, it.id.path.titlecase());
+        };
 
-        ToolSynergy.entries.forEach { synergy ->
-            translationBuilder.add(synergy.translationKey, synergy.name.titlecase());
-        }
-
-        ToolTier.entries.forEach { tier ->
-            translationBuilder.add(tier.translationKey, tier.name.titlecase());
-        }
-
-        ToolAction.VALUES.forEach { action ->
-            translationBuilder.add(action.translationKey, action.name.titlecase());
-        }
-
-        Words.VALUES.forEach { word ->
-            translationBuilder.add(word.translationKey, word.name.titlecase());
-        }
+        ModulusItems.PARTS.values.forEach {
+            translationBuilder.add(it, it.id.path.titlecase());
+        };
     }
 }

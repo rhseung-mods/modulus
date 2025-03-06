@@ -3,15 +3,12 @@
     "package": "com.rhseung.modulus.mixin",
     "compatibilityLevel": "JAVA_21",
     "mixins": [
-        "ItemStackMixin"
+        "accessor.PathResolverAccessor"
     ],
     "injectors": {
         "defaultRequire": 1
     },
     "client": [
-        "CrackParticleMixin",
-        "ItemModelGeneratorMixin",
-        "ItemRendererMixin",
-        "JsonUnbakedModelMixin"
+        "ItemModelTypesMixin"
     ]
 }

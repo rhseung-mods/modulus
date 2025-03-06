@@ -1,13 +1,16 @@
 package com.rhseung.modulus
 
-import com.rhseung.modulus.init.ModItems
-import com.rhseung.modulus.item.ToolItem
+import com.rhseung.modulus.init.ModulusComponents
+import com.rhseung.modulus.init.ModulusItemGroups
+import com.rhseung.modulus.init.ModulusItems
+import com.rhseung.modulus.init.ModulusRecipeSerializers
 import net.fabricmc.api.ClientModInitializer
-import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 
 object ModulusClient : ClientModInitializer {
     override fun onInitializeClient() {
-        ModItems.initializeClient();
-//        ModelLoadingPlugin.register()
+        ModulusComponents.initializeClient();
+        ModulusItemGroups.initializeClient();
+        ModulusItems.initializeClient();
+        ModulusRecipeSerializers.initializeClient();
     }
 }

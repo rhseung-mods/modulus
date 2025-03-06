@@ -1,0 +1,399 @@
+{
+  "model": {
+    "type": "modulus:tool",
+    "map": {
+      "axe_left_head": {
+        "model": "modulus:item/part/axe_left_head",
+        "tints": [
+          {
+            "type": "blueprint:palette",
+            "index": 0
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 1
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 2
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 3
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 4
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 5
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 6
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 7
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 8
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 9
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 10
+          }
+        ]
+      },
+      "axe_right_head": {
+        "model": "modulus:item/part/axe_right_head",
+        "tints": [
+          {
+            "type": "blueprint:palette",
+            "index": 0
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 1
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 2
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 3
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 4
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 5
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 6
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 7
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 8
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 9
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 10
+          }
+        ]
+      },
+      "butt_head": {
+        "model": "modulus:item/part/butt_head",
+        "tints": [
+          {
+            "type": "blueprint:palette",
+            "index": 0
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 1
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 2
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 3
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 4
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 5
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 6
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 7
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 8
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 9
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 10
+          }
+        ]
+      },
+      "handle": {
+        "model": "modulus:item/part/handle",
+        "tints": [
+          {
+            "type": "blueprint:palette",
+            "index": 0
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 1
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 2
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 3
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 4
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 5
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 6
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 7
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 8
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 9
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 10
+          }
+        ]
+      },
+      "hoe_head": {
+        "model": "modulus:item/part/hoe_head",
+        "tints": [
+          {
+            "type": "blueprint:palette",
+            "index": 0
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 1
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 2
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 3
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 4
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 5
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 6
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 7
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 8
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 9
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 10
+          }
+        ]
+      },
+      "pickaxe_left_head": {
+        "model": "modulus:item/part/pickaxe_left_head",
+        "tints": [
+          {
+            "type": "blueprint:palette",
+            "index": 0
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 1
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 2
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 3
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 4
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 5
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 6
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 7
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 8
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 9
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 10
+          }
+        ]
+      },
+      "pickaxe_right_head": {
+        "model": "modulus:item/part/pickaxe_right_head",
+        "tints": [
+          {
+            "type": "blueprint:palette",
+            "index": 0
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 1
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 2
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 3
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 4
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 5
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 6
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 7
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 8
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 9
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 10
+          }
+        ]
+      },
+      "shovel_head": {
+        "model": "modulus:item/part/shovel_head",
+        "tints": [
+          {
+            "type": "blueprint:palette",
+            "index": 0
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 1
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 2
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 3
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 4
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 5
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 6
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 7
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 8
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 9
+          },
+          {
+            "type": "blueprint:palette",
+            "index": 10
+          }
+        ]
+      }
+    }
+  }
+}
